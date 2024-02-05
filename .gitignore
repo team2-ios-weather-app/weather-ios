@@ -34,3 +34,6 @@ playground.xcworkspace
 *.moved-aside
 *.xccheckout
 *.xcuserstate
+
+Pods/
+*.xcworkspace
