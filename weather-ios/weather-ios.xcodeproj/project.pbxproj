@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4630FDB32B70E2140015CF43 /* RegionWeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4630FDB22B70E2140015CF43 /* RegionWeatherVC.swift */; };
-		4630FDB62B70E2F80015CF43 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4630FDB52B70E2F80015CF43 /* SnapKit */; };
-		4630FDB82B70E2F80015CF43 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 4630FDB72B70E2F80015CF43 /* SnapKit-Dynamic */; };
 		468B86B82B70C24C001836C1 /* RegionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468B86B72B70C24C001836C1 /* RegionInfo.swift */; };
 		91994F847D33D045E16F8C9F /* Pods_weather_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F064FAF57BA02D69168CD1B7 /* Pods_weather_ios.framework */; };
 		C411AD912B71108A00E88089 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411AD902B71108A00E88089 /* MapViewController.swift */; };
@@ -45,8 +43,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4630FDB62B70E2F80015CF43 /* SnapKit in Frameworks */,
-				4630FDB82B70E2F80015CF43 /* SnapKit-Dynamic in Frameworks */,
 				91994F847D33D045E16F8C9F /* Pods_weather_ios.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,7 +64,6 @@
 				408DA3AAD9260C3E4752A2C8 /* Pods-weather-ios.debug.xcconfig */,
 				F22EFF3A77620BF728CC6CB5 /* Pods-weather-ios.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -159,8 +154,6 @@
 			);
 			name = "weather-ios";
 			packageProductDependencies = (
-				4630FDB52B70E2F80015CF43 /* SnapKit */,
-				4630FDB72B70E2F80015CF43 /* SnapKit-Dynamic */,
 			);
 			productName = "weather-ios";
 			productReference = E0360CAE2B70BB0E004C40F4 /* weather-ios.app */;
@@ -191,7 +184,6 @@
 			);
 			mainGroup = E0360CA52B70BB0E004C40F4;
 			packageReferences = (
-				4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = E0360CAF2B70BB0E004C40F4 /* Products */;
 			projectDirPath = "";
@@ -414,6 +406,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 23N5J9ACJ7;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "weather-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -442,6 +435,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 23N5J9ACJ7;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "weather-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -483,30 +477,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		4630FDB52B70E2F80015CF43 /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		4630FDB72B70E2F80015CF43 /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E0360CA62B70BB0E004C40F4 /* Project object */;
 }
