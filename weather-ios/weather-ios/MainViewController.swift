@@ -12,11 +12,11 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        
         let requestTestButton: UIButton = {
             let button = UIButton(type: .system, primaryAction: .init(handler: { _ in
-                WeatherService().fetchWeather(lat: 10.99, lon: 44.34, completion: { data in
-                    print(data ?? "")
+                WeatherService().fetchWeather(lat: 35.2100, lon: 129.0689, completion: { data in
+//                    print(data ?? "")
+                    debugPrint(data ?? "")
                 })
             }))
 
