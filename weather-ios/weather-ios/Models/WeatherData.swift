@@ -5,66 +5,63 @@
 //  Created by JiHoon K on 2/5/24.
 //
 
-import Foundation
-
 struct WeatherData: Decodable {
-    let request: Request
-    let location: Location
-    let current: Current
-}
-
-extension WeatherData {
-    struct Request: Decodable {
-        let type: String
-        let query: String
-        let language: String
-        let unit: String
+    let coord: Coordinates?
+    let weather: [Weather]?
+    let main: Main?
+    let visibility: Int?
+    let wind: Wind?
+    let clouds: Clouds?
+    let dt: Int?
+    let sys: Sys?
+    let timezone: Int?
+    let id: Int?
+    let name: String?
+    let cod: Int?
+    
+    struct Coordinates: Decodable {
+        let lon: Double?
+        let lat: Double?
     }
-
-    struct Location: Decodable {
-        let name: String
-        let country: String
-        let region: String
-        let lat: String
-        let lon: String
-        let timezoneId: String
-        let localtime: String
-        let localtimeEpoch: Int
-        let utcOffset: String
-
-        enum CodingKeys: String, CodingKey {
-            case name, country, region, lat, lon, localtime, localtimeEpoch, utcOffset
-            case timezoneId = "timezone_id"
+    
+    struct Weather: Decodable {
+        let id: Int?
+        let main: String?
+        let description: String?
+        let icon: String?
+    }
+    
+    struct Main: Decodable {
+        let temp: Double?
+        let feelsLike: Double?
+        let tempMin: Double?
+        let tempMax: Double?
+        let pressure: Int?
+        let humidity: Int?
+        
+        private enum CodingKeys: String, CodingKey {
+            case temp, pressure, humidity
+            case feelsLike = "feels_like"
+            case tempMin = "temp_min"
+            case tempMax = "temp_max"
         }
     }
-
-    struct Current: Decodable {
-        let observationTime: String
-        let temperature: Int
-        let weatherCode: Int
-        let weatherIcons: [String]
-        let weatherDescriptions: [String]
-        let windSpeed: Int
-        let windDegree: Int
-        let windDir: String
-        let pressure: Int
-        let precip: Int
-        let humidity: Int
-        let cloudcover: Int
-        let feelslike: Int
-        let uvIndex: Int
-        let visibility: Int
-
-        enum CodingKeys: String, CodingKey {
-            case temperature, pressure, precip, humidity, cloudcover, feelslike, visibility
-            case observationTime = "observation_time"
-            case weatherCode = "weather_code"
-            case weatherIcons = "weather_icons"
-            case weatherDescriptions = "weather_descriptions"
-            case windSpeed = "wind_speed"
-            case windDegree = "wind_degree"
-            case windDir = "wind_dir"
-            case uvIndex = "uv_index"
-        }
+    
+    struct Wind: Decodable {
+        let speed: Double?
+        let deg: Int?
+        let gust: Double?
+    }
+    
+    struct Clouds: Decodable {
+        let all: Int?
+    }
+    
+    struct Sys: Decodable {
+        let type: Int?
+        let id: Int?
+        let country: String?
+        let sunrise: Int?
+        let sunset: Int?
     }
 }

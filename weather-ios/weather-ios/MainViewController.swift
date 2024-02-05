@@ -12,7 +12,27 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        view.backgroundColor = .systemBlue
+        
+        let requestTestButton: UIButton = {
+            let button = UIButton(type: .system, primaryAction: .init(handler: { _ in
+                WeatherService().fetchWeather(lat: 10.99, lon: 44.34, completion: { data in
+                    print(data ?? "")
+                })
+            }))
+
+            button.setTitle("requestTestButton", for: .normal)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            return button
+        }()
+        
+        view.addSubview(requestTestButton)
+        
+        NSLayoutConstraint.activate([
+            requestTestButton.topAnchor.constraint(equalTo: view.topAnchor),
+            requestTestButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            requestTestButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            requestTestButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        ])
     }
 }
 
