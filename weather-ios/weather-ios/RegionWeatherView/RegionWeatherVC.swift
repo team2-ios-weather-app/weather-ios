@@ -2,10 +2,10 @@ import UIKit
 import SnapKit
 
 
-class RegionWeatherVC: UIViewController, UISearchResultsUpdating, UISearchBarDelegate {
+class RegionWeatherVC: UIViewController {
     var regionTableView: UITableView!
     var searchController: UISearchController!
-    var weatherData: [WeatherData] = []
+    var weatherData: [CrntWeatherData] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +72,7 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
 extension RegionWeatherVC: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         //검색 결과를 업데이트하는 메서드를 정의
-        <#code#>
+        
     }
 }
 

@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4630FDB32B70E2140015CF43 /* RegionWeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4630FDB22B70E2140015CF43 /* RegionWeatherVC.swift */; };
-		4630FDB62B70E2F80015CF43 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4630FDB52B70E2F80015CF43 /* SnapKit */; };
-		4630FDB82B70E2F80015CF43 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 4630FDB72B70E2F80015CF43 /* SnapKit-Dynamic */; };
 		468B86B82B70C24C001836C1 /* RegionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468B86B72B70C24C001836C1 /* RegionInfo.swift */; };
 		91994F847D33D045E16F8C9F /* Pods_weather_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F064FAF57BA02D69168CD1B7 /* Pods_weather_ios.framework */; };
 		C411AD912B71108A00E88089 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411AD902B71108A00E88089 /* MapViewController.swift */; };
@@ -19,7 +17,8 @@
 		E0360CB62B70BB0E004C40F4 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0360CB52B70BB0E004C40F4 /* MainViewController.swift */; };
 		E0360CBB2B70BB0F004C40F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0360CBA2B70BB0F004C40F4 /* Assets.xcassets */; };
 		E0360CBE2B70BB0F004C40F4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0360CBC2B70BB0F004C40F4 /* LaunchScreen.storyboard */; };
-		E0360CC82B70BB5E004C40F4 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0360CC72B70BB5E004C40F4 /* WeatherData.swift */; };
+		E0360CC82B70BB5E004C40F4 /* CrntWeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0360CC72B70BB5E004C40F4 /* CrntWeatherData.swift */; };
+		E0C6CC8A2B71717300E47259 /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C6CC892B71717300E47259 /* WeatherService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +34,8 @@
 		E0360CBA2B70BB0F004C40F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E0360CBD2B70BB0F004C40F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E0360CBF2B70BB0F004C40F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E0360CC72B70BB5E004C40F4 /* WeatherData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
+		E0360CC72B70BB5E004C40F4 /* CrntWeatherData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrntWeatherData.swift; sourceTree = "<group>"; };
+		E0C6CC892B71717300E47259 /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
 		F064FAF57BA02D69168CD1B7 /* Pods_weather_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_weather_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F22EFF3A77620BF728CC6CB5 /* Pods-weather-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weather-ios.release.xcconfig"; path = "Target Support Files/Pods-weather-ios/Pods-weather-ios.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -45,8 +45,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4630FDB62B70E2F80015CF43 /* SnapKit in Frameworks */,
-				4630FDB82B70E2F80015CF43 /* SnapKit-Dynamic in Frameworks */,
 				91994F847D33D045E16F8C9F /* Pods_weather_ios.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,7 +66,6 @@
 				408DA3AAD9260C3E4752A2C8 /* Pods-weather-ios.debug.xcconfig */,
 				F22EFF3A77620BF728CC6CB5 /* Pods-weather-ios.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -118,13 +115,13 @@
 		E0360CB02B70BB0E004C40F4 /* weather-ios */ = {
 			isa = PBXGroup;
 			children = (
-				468B86B62B70C22F001836C1 /* RegionWeatherView */,
-				C418E9B92B70BE4900A0C2B3 /* SavedLocationsWeather */,
-				C418E9B82B70BE3200A0C2B3 /* MapWeatherChecking */,
 				E0360CB12B70BB0E004C40F4 /* AppDelegate.swift */,
 				E0360CB32B70BB0E004C40F4 /* SceneDelegate.swift */,
 				E0360CB52B70BB0E004C40F4 /* MainViewController.swift */,
 				E0360CC62B70BB5E004C40F4 /* Models */,
+				468B86B62B70C22F001836C1 /* RegionWeatherView */,
+				C418E9B92B70BE4900A0C2B3 /* SavedLocationsWeather */,
+				C418E9B82B70BE3200A0C2B3 /* MapWeatherChecking */,
 				E0360CBA2B70BB0F004C40F4 /* Assets.xcassets */,
 				E0360CBC2B70BB0F004C40F4 /* LaunchScreen.storyboard */,
 				E0360CBF2B70BB0F004C40F4 /* Info.plist */,
@@ -135,7 +132,8 @@
 		E0360CC62B70BB5E004C40F4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E0360CC72B70BB5E004C40F4 /* WeatherData.swift */,
+				E0360CC72B70BB5E004C40F4 /* CrntWeatherData.swift */,
+				E0C6CC892B71717300E47259 /* WeatherService.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -159,8 +157,6 @@
 			);
 			name = "weather-ios";
 			packageProductDependencies = (
-				4630FDB52B70E2F80015CF43 /* SnapKit */,
-				4630FDB72B70E2F80015CF43 /* SnapKit-Dynamic */,
 			);
 			productName = "weather-ios";
 			productReference = E0360CAE2B70BB0E004C40F4 /* weather-ios.app */;
@@ -191,7 +187,6 @@
 			);
 			mainGroup = E0360CA52B70BB0E004C40F4;
 			packageReferences = (
-				4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = E0360CAF2B70BB0E004C40F4 /* Products */;
 			projectDirPath = "";
@@ -266,7 +261,8 @@
 				C418E9BB2B70BFFA00A0C2B3 /* example.swift in Sources */,
 				E0360CB62B70BB0E004C40F4 /* MainViewController.swift in Sources */,
 				E0360CB22B70BB0E004C40F4 /* AppDelegate.swift in Sources */,
-				E0360CC82B70BB5E004C40F4 /* WeatherData.swift in Sources */,
+				E0360CC82B70BB5E004C40F4 /* CrntWeatherData.swift in Sources */,
+				E0C6CC8A2B71717300E47259 /* WeatherService.swift in Sources */,
 				E0360CB42B70BB0E004C40F4 /* SceneDelegate.swift in Sources */,
 				C411AD912B71108A00E88089 /* MapViewController.swift in Sources */,
 			);
@@ -414,6 +410,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 23N5J9ACJ7;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "weather-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -442,6 +439,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 23N5J9ACJ7;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "weather-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -483,30 +481,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		4630FDB52B70E2F80015CF43 /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		4630FDB72B70E2F80015CF43 /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E0360CA62B70BB0E004C40F4 /* Project object */;
 }
