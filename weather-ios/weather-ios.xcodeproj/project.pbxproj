@@ -37,6 +37,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C418E9B82B70BE3200A0C2B3 /* MapWeatherChecking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MapWeatherChecking;
+			sourceTree = "<group>";
+		};
+		C418E9B92B70BE4900A0C2B3 /* SavedLocationsWeather */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SavedLocationsWeather;
+			sourceTree = "<group>";
+		};
 		E0360CA52B70BB0E004C40F4 = {
 			isa = PBXGroup;
 			children = (
@@ -56,24 +70,17 @@
 		E0360CB02B70BB0E004C40F4 /* weather-ios */ = {
 			isa = PBXGroup;
 			children = (
+				C418E9B92B70BE4900A0C2B3 /* SavedLocationsWeather */,
+				C418E9B82B70BE3200A0C2B3 /* MapWeatherChecking */,
 				E0360CB12B70BB0E004C40F4 /* AppDelegate.swift */,
 				E0360CB32B70BB0E004C40F4 /* SceneDelegate.swift */,
 				E0360CB52B70BB0E004C40F4 /* MainViewController.swift */,
 				E0360CC62B70BB5E004C40F4 /* Models */,
-				E0360CC52B70BB4D004C40F4 /* MapWeatherChecking */,
-				E0360CC92B70BB84004C40F4 /* SavedLocationsWeather */,
 				E0360CBA2B70BB0F004C40F4 /* Assets.xcassets */,
 				E0360CBC2B70BB0F004C40F4 /* LaunchScreen.storyboard */,
 				E0360CBF2B70BB0F004C40F4 /* Info.plist */,
 			);
 			path = "weather-ios";
-			sourceTree = "<group>";
-		};
-		E0360CC52B70BB4D004C40F4 /* MapWeatherChecking */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = MapWeatherChecking;
 			sourceTree = "<group>";
 		};
 		E0360CC62B70BB5E004C40F4 /* Models */ = {
@@ -82,13 +89,6 @@
 				E0360CC72B70BB5E004C40F4 /* WeatherData.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		E0360CC92B70BB84004C40F4 /* SavedLocationsWeather */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = SavedLocationsWeather;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
