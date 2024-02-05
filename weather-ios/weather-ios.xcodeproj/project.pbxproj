@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+
 		BDF6989319AA73EC8ADD9AC5 /* Pods_weather_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAAB2C274C17F65C79721FBC /* Pods_weather_ios.framework */; };
+		4630FDB32B70E2140015CF43 /* RegionWeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4630FDB22B70E2140015CF43 /* RegionWeatherVC.swift */; };
+		4630FDB62B70E2F80015CF43 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4630FDB52B70E2F80015CF43 /* SnapKit */; };
+		4630FDB82B70E2F80015CF43 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 4630FDB72B70E2F80015CF43 /* SnapKit-Dynamic */; };
+		468B86B82B70C24C001836C1 /* RegionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468B86B72B70C24C001836C1 /* RegionInfo.swift */; };
 		C418E9BB2B70BFFA00A0C2B3 /* example.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418E9BA2B70BFFA00A0C2B3 /* example.swift */; };
 		C418E9BD2B70C00400A0C2B3 /* example2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418E9BC2B70C00400A0C2B3 /* example2.swift */; };
 		C418E9BF2B70C73600A0C2B3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418E9BE2B70C73600A0C2B3 /* MapViewController.swift */; };
@@ -21,6 +26,8 @@
 
 /* Begin PBXFileReference section */
 		3525C0C3260158B10294BC9C /* Pods-weather-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weather-ios.release.xcconfig"; path = "Target Support Files/Pods-weather-ios/Pods-weather-ios.release.xcconfig"; sourceTree = "<group>"; };
+		4630FDB22B70E2140015CF43 /* RegionWeatherVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionWeatherVC.swift; sourceTree = "<group>"; };
+		468B86B72B70C24C001836C1 /* RegionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionInfo.swift; sourceTree = "<group>"; };
 		C418E9BA2B70BFFA00A0C2B3 /* example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = example.swift; sourceTree = "<group>"; };
 		C418E9BC2B70C00400A0C2B3 /* example2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = example2.swift; sourceTree = "<group>"; };
 		C418E9BE2B70C73600A0C2B3 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -42,6 +49,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BDF6989319AA73EC8ADD9AC5 /* Pods_weather_ios.framework in Frameworks */,
+				4630FDB62B70E2F80015CF43 /* SnapKit in Frameworks */,
+				4630FDB82B70E2F80015CF43 /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +72,13 @@
 				CAAB2C274C17F65C79721FBC /* Pods_weather_ios.framework */,
 			);
 			name = Frameworks;
+		468B86B62B70C22F001836C1 /* RegionWeatherView */ = {
+			isa = PBXGroup;
+			children = (
+				468B86B72B70C24C001836C1 /* RegionInfo.swift */,
+				4630FDB22B70E2140015CF43 /* RegionWeatherVC.swift */,
+			);
+			path = RegionWeatherView;
 			sourceTree = "<group>";
 		};
 		C418E9B82B70BE3200A0C2B3 /* MapWeatherChecking */ = {
@@ -103,6 +119,7 @@
 		E0360CB02B70BB0E004C40F4 /* weather-ios */ = {
 			isa = PBXGroup;
 			children = (
+				468B86B62B70C22F001836C1 /* RegionWeatherView */,
 				C418E9B92B70BE4900A0C2B3 /* SavedLocationsWeather */,
 				C418E9B82B70BE3200A0C2B3 /* MapWeatherChecking */,
 				E0360CB12B70BB0E004C40F4 /* AppDelegate.swift */,
@@ -142,6 +159,10 @@
 			dependencies = (
 			);
 			name = "weather-ios";
+			packageProductDependencies = (
+				4630FDB52B70E2F80015CF43 /* SnapKit */,
+				4630FDB72B70E2F80015CF43 /* SnapKit-Dynamic */,
+			);
 			productName = "weather-ios";
 			productReference = E0360CAE2B70BB0E004C40F4 /* weather-ios.app */;
 			productType = "com.apple.product-type.application";
@@ -170,6 +191,9 @@
 				Base,
 			);
 			mainGroup = E0360CA52B70BB0E004C40F4;
+			packageReferences = (
+				4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = E0360CAF2B70BB0E004C40F4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -238,6 +262,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				468B86B82B70C24C001836C1 /* RegionInfo.swift in Sources */,
+				4630FDB32B70E2140015CF43 /* RegionWeatherVC.swift in Sources */,
 				C418E9BB2B70BFFA00A0C2B3 /* example.swift in Sources */,
 				E0360CB62B70BB0E004C40F4 /* MainViewController.swift in Sources */,
 				E0360CB22B70BB0E004C40F4 /* AppDelegate.swift in Sources */,
@@ -459,6 +485,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4630FDB52B70E2F80015CF43 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		4630FDB72B70E2F80015CF43 /* SnapKit-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4630FDB42B70E2F80015CF43 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = "SnapKit-Dynamic";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E0360CA62B70BB0E004C40F4 /* Project object */;
 }
