@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		468B86B82B70C24C001836C1 /* RegionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468B86B72B70C24C001836C1 /* RegionInfo.swift */; };
 		C418E9BB2B70BFFA00A0C2B3 /* example.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418E9BA2B70BFFA00A0C2B3 /* example.swift */; };
 		C418E9BD2B70C00400A0C2B3 /* example2.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418E9BC2B70C00400A0C2B3 /* example2.swift */; };
 		E0360CB22B70BB0E004C40F4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0360CB12B70BB0E004C40F4 /* AppDelegate.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		468B86B72B70C24C001836C1 /* RegionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionInfo.swift; sourceTree = "<group>"; };
 		C418E9BA2B70BFFA00A0C2B3 /* example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = example.swift; sourceTree = "<group>"; };
 		C418E9BC2B70C00400A0C2B3 /* example2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = example2.swift; sourceTree = "<group>"; };
 		E0360CAE2B70BB0E004C40F4 /* weather-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "weather-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -41,6 +43,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		468B86B62B70C22F001836C1 /* RegionView */ = {
+			isa = PBXGroup;
+			children = (
+				468B86B72B70C24C001836C1 /* RegionInfo.swift */,
+			);
+			path = RegionView;
+			sourceTree = "<group>";
+		};
 		C418E9B82B70BE3200A0C2B3 /* MapWeatherChecking */ = {
 			isa = PBXGroup;
 			children = (
@@ -76,6 +86,7 @@
 		E0360CB02B70BB0E004C40F4 /* weather-ios */ = {
 			isa = PBXGroup;
 			children = (
+				468B86B62B70C22F001836C1 /* RegionView */,
 				C418E9B92B70BE4900A0C2B3 /* SavedLocationsWeather */,
 				C418E9B82B70BE3200A0C2B3 /* MapWeatherChecking */,
 				E0360CB12B70BB0E004C40F4 /* AppDelegate.swift */,
@@ -167,6 +178,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				468B86B82B70C24C001836C1 /* RegionInfo.swift in Sources */,
 				C418E9BB2B70BFFA00A0C2B3 /* example.swift in Sources */,
 				E0360CB62B70BB0E004C40F4 /* MainViewController.swift in Sources */,
 				E0360CB22B70BB0E004C40F4 /* AppDelegate.swift in Sources */,
