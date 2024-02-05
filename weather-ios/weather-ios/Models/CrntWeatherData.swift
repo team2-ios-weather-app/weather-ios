@@ -1,11 +1,12 @@
 //
-//  WeatherData.swift
+//  CrntWeatherData.swift
 //  weather-ios
 //
 //  Created by JiHoon K on 2/5/24.
 //
 
-struct WeatherData: Decodable {
+/// Current weather data
+struct CrntWeatherData: Decodable {
     let coord: Coordinates?
     let weather: [Weather]?
     let main: Main?

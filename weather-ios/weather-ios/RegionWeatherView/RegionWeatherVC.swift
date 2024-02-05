@@ -5,7 +5,7 @@ import SnapKit
 class RegionWeatherVC: UIViewController {
     var regionTableView: UITableView!
     var searchController: UISearchController!
-    var weatherData: [WeatherData] = []
+    var weatherData: [CrntWeatherData] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
