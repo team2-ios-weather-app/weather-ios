@@ -1,0 +1,36 @@
+# Xcode
+#
+# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+
+## User settings
+xcuserdata/
+*.xcuserdatad
+*.xcscmblueprint
+
+## Project settings
+project.xcworkspace/
+
+## Derived Data
+DerivedData/
+
+## Snapshots
+*.gcov
+*.swp
+*.swp?
+*~
+.\#*
+.DS_Store
+.idea/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+## Other
+*.moved-aside
+*.xccheckout
+*.xcuserstate
