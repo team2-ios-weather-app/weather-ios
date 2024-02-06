@@ -41,6 +41,7 @@ class RegionWeatherVC: UIViewController, UISearchResultsUpdating, UISearchBarDel
         regionTableView.delegate = self
         regionTableView.dataSource = self
         regionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        
         view.addSubview(regionTableView)
         
         regionTableView.snp.makeConstraints { make in
