@@ -14,7 +14,7 @@ class MainViewController: UIViewController {
         
         let requestTestButton: UIButton = {
             let button = UIButton(type: .system, primaryAction: .init(handler: { _ in
-                WeatherService().getCrntWeatherData(lat: 35.2100, lon: 129.0689, completion: { data in
+                WeatherService().getCrntWeatherData(lat: 37.4563, lon: 126.7052, completion: { data in
 //                    print(data ?? "")
                     debugPrint(data ?? "")
                 })
