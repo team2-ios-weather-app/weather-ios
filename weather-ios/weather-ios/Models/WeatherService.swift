@@ -14,32 +14,41 @@ class WeatherService {
 
 //MARK: - Requests
 extension WeatherService {
-    func getCrntWeatherData(lat: Double, lon: Double, completion: @escaping (CrntWeatherData?) -> Void) {
-        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&appid=\(apiKey)&lang=\("kr")"
-        guard let url = URL(string: urlString) else { return }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print(error)
-                return
-            }
-            
-            guard let data = data else { return }
-            
-            do {
-                let weatherResponse = try JSONDecoder().decode(CrntWeatherData.self, from: data)
-                completion(weatherResponse)
-            } catch {
-                print(error)
-            }
-        }.resume()
+    /// 도시 이름 넣으면 현재 날씨 데이터 반환
+    func getCrntWeatherData(_ cityName: String) async -> CrntWeatherData? {
+        guard let coordi = await WeatherService().getCoordinate(cityName) else { return nil }
+        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordi.lat)&lon=\(coordi.lon)&appid=\(apiKey)&lang=kr&units=metric"
+        guard let url = URL(string: urlString) else { return nil }
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let weatherResponse = try JSONDecoder().decode(CrntWeatherData.self, from: data)
+            return weatherResponse
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
+    /// 도시 이름 넣으면 좌표 데이터 반환
+    func getCoordinate(_ cityName: String) async -> Coordinate? {
+        let urlString = "http://api.openweathermap.org/geo/1.0/direct?q=\(cityName)&limit=1&appid=\(apiKey)"
+        guard let url = URL(string: urlString) else { return nil }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let weatherResponse = try JSONDecoder().decode([Coordinate].self, from: data)
+            return weatherResponse.first // Assuming you're interested in the first result
+        } catch {
+            print(error)
+            return nil
+        }
     }
 }
 
 //MARK: - Helpers
 extension WeatherService {
     static func testGetCrntWeatherData() -> CrntWeatherData { // 사용 예시: WeatherService.testGetCrntWeatherData()
-        return CrntWeatherData(coord: .init(lon: 35.2100, lat: 129.0689),
+        return CrntWeatherData(coord: .init(lat: 129.0689, lon: 35.2100),
                            weather: [.init(id: 804,
                                            main: "Clouds",
                                            description: "온흐림",
