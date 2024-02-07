@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4630FDB32B70E2140015CF43 /* RegionWeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4630FDB22B70E2140015CF43 /* RegionWeatherVC.swift */; };
-		468B86B82B70C24C001836C1 /* RegionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468B86B72B70C24C001836C1 /* RegionInfo.swift */; };
+		4630FDB32B70E2140015CF43 /* RegionWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4630FDB22B70E2140015CF43 /* RegionWeatherViewController.swift */; };
+		468B86B82B70C24C001836C1 /* addSubViewsCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468B86B72B70C24C001836C1 /* addSubViewsCustom.swift */; };
 		91994F847D33D045E16F8C9F /* Pods_weather_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F064FAF57BA02D69168CD1B7 /* Pods_weather_ios.framework */; };
 		C411AD912B71108A00E88089 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411AD902B71108A00E88089 /* MapViewController.swift */; };
 		C418E9BB2B70BFFA00A0C2B3 /* example.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418E9BA2B70BFFA00A0C2B3 /* example.swift */; };
@@ -24,8 +24,8 @@
 
 /* Begin PBXFileReference section */
 		408DA3AAD9260C3E4752A2C8 /* Pods-weather-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weather-ios.debug.xcconfig"; path = "Target Support Files/Pods-weather-ios/Pods-weather-ios.debug.xcconfig"; sourceTree = "<group>"; };
-		4630FDB22B70E2140015CF43 /* RegionWeatherVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionWeatherVC.swift; sourceTree = "<group>"; };
-		468B86B72B70C24C001836C1 /* RegionInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionInfo.swift; sourceTree = "<group>"; };
+		4630FDB22B70E2140015CF43 /* RegionWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionWeatherViewController.swift; sourceTree = "<group>"; };
+		468B86B72B70C24C001836C1 /* addSubViewsCustom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addSubViewsCustom.swift; sourceTree = "<group>"; };
 		C411AD902B71108A00E88089 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		C418E9BA2B70BFFA00A0C2B3 /* example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = example.swift; sourceTree = "<group>"; };
 		E02BB7862B72D1D10094069E /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
@@ -74,8 +74,8 @@
 		468B86B62B70C22F001836C1 /* RegionWeatherView */ = {
 			isa = PBXGroup;
 			children = (
-				468B86B72B70C24C001836C1 /* RegionInfo.swift */,
-				4630FDB22B70E2140015CF43 /* RegionWeatherVC.swift */,
+				468B86B72B70C24C001836C1 /* addSubViewsCustom.swift */,
+				4630FDB22B70E2140015CF43 /* RegionWeatherViewController.swift */,
 			);
 			path = RegionWeatherView;
 			sourceTree = "<group>";
@@ -259,8 +259,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				468B86B82B70C24C001836C1 /* RegionInfo.swift in Sources */,
-				4630FDB32B70E2140015CF43 /* RegionWeatherVC.swift in Sources */,
+				468B86B82B70C24C001836C1 /* addSubViewsCustom.swift in Sources */,
+				4630FDB32B70E2140015CF43 /* RegionWeatherViewController.swift in Sources */,
 				C418E9BB2B70BFFA00A0C2B3 /* example.swift in Sources */,
 				E0360CB62B70BB0E004C40F4 /* MainViewController.swift in Sources */,
 				E0360CB22B70BB0E004C40F4 /* AppDelegate.swift in Sources */,
