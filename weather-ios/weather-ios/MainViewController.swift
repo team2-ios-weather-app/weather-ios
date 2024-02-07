@@ -80,7 +80,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     
     @objc private func requestWeatherUpdate() {
         Task {
-            let crntWeather = await weatherService.getCrntWeatherDataForCity("사하구")
+            let crntWeather = await weatherService.getCrntWeatherData(cityName: "수영구")
             DispatchQueue.main.async {
                 self.updateWeatherInfo(crntWeather)
             }
@@ -92,9 +92,10 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
             print("현재 위치: 위도 \(location.coordinate.latitude), 경도 \(location.coordinate.longitude)")
             locationManager.stopUpdatingLocation()
             
-            weatherService.getCrntWeatherDataForCoordinates(lat: location.coordinate.latitude, lon: location.coordinate.longitude) { [weak self] weatherData in
+            Task {
+                let weatherData = await weatherService.getCrntWeatherData(coordinate: .init(lat: location.coordinate.latitude, lon: location.coordinate.longitude))
                 DispatchQueue.main.async {
-                    self?.updateWeatherInfo(weatherData)
+                    self.updateWeatherInfo(weatherData)
                 }
             }
         }
