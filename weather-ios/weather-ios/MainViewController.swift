@@ -8,18 +8,22 @@
 import UIKit
 
 class MainViewController: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         let requestTestButton: UIButton = {
             let button = UIButton(type: .system, primaryAction: .init(handler: { _ in
-                WeatherService().getCrntWeatherData(lat: 35.2100, lon: 129.0689, completion: { data in
-//                    print(data ?? "")
-                    debugPrint(data ?? "")
-                })
+                Task {
+                    let crntWeather = await WeatherService().getCrntWeatherData("수영구")
+                    debugPrint(crntWeather ?? "")
+                    DispatchQueue.main.async {
+                        self.view.backgroundColor = .black
+                    }
+                }
             }))
-
+            
             button.setTitle("requestTestButton", for: .normal)
             button.translatesAutoresizingMaskIntoConstraints = false
             return button
@@ -36,3 +40,7 @@ class MainViewController: UIViewController {
     }
 }
 
+@available(iOS 17, *)
+#Preview("", traits: .defaultLayout) {
+  return MainViewController()
+}

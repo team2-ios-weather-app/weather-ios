@@ -7,10 +7,10 @@
 
 /// Current weather data
 struct CrntWeatherData: Decodable {
-    let coord: Coordinates?
+    let coord: Coordinate? // 좌표 값
     let weather: [Weather]?
     let main: Main?
-    let visibility: Int? // 가시성, 미터. 가시성의 최대 값은 10km입니다
+    let visibility: Int?
     let wind: Wind?
     let clouds: Clouds?
     let rain: Rain?
@@ -21,12 +21,9 @@ struct CrntWeatherData: Decodable {
     let id: Int? //  City ID. Please note that built-in geocoder functionality has been deprecated. Learn more
     let name: String? // 도시 이름
     let cod: Int?
-    
-    struct Coordinates: Decodable {
-        let lon: Double? // 경도
-        let lat: Double? // 위도
-    }
-    
+}
+
+extension CrntWeatherData {
     struct Weather: Decodable {
         let id: Int? // 날씨 상태 ID (참고: https://openweathermap.org/weather-conditions)
         let main: String?
@@ -34,6 +31,7 @@ struct CrntWeatherData: Decodable {
         let icon: String?
     }
     
+    // 여기에 메인 데이터 있음
     struct Main: Decodable {
         let temp: Double? // 온도 (단위 기본값: 켈빈, 미터법: 섭씨, 영국식: 화씨)
         let feelsLike: Double?  // 체감 온도
