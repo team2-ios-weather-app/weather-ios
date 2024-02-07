@@ -14,24 +14,30 @@ class WeatherService {
 
 //MARK: - Requests
 extension WeatherService {
-    
-    /// 도시 이름 넣으면 현재 날씨 데이터 반환
-    func getCrntWeatherDataForCity(_ cityName: String) async -> CrntWeatherData? {
-        guard let coordi = await WeatherService().getCoordinateForCity(cityName) else { return nil }
-        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordi.lat)&lon=\(coordi.lon)&appid=\(apiKey)&lang=kr&units=metric"
-        guard let url = URL(string: urlString) else { return nil }
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            let weatherResponse = try JSONDecoder().decode(CrntWeatherData.self, from: data)
-            return weatherResponse
-        } catch {
-            print(error)
+    /// 도시 이름 또는 좌표 둘 중 하나만 넣으면 현재 날씨 데이터 반환
+    func getCrntWeatherData(cityName: String? = nil, coordinate: Coordinate? = nil) async -> CrntWeatherData? {
+        var coordinate = coordinate
+        if let cityName = cityName { coordinate = await getCoordinateFor(cityName) }
+            
+        if let coordinate = coordinate {
+            let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.lat)&lon=\(coordinate.lon)&appid=\(apiKey)&lang=kr&units=metric"
+            guard let url = URL(string: urlString) else { return nil }
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                let weatherResponse = try JSONDecoder().decode(CrntWeatherData.self, from: data)
+                return weatherResponse
+            } catch {
+                print(error)
+                return nil
+            }
+        } else {
+            print("coordinate nil")
             return nil
         }
     }
     
     /// 도시 이름 넣으면 좌표 데이터 반환
-    func getCoordinateForCity(_ cityName: String) async -> Coordinate? {
+    func getCoordinateFor(_ cityName: String) async -> Coordinate? {
         let urlString = "http://api.openweathermap.org/geo/1.0/direct?q=\(cityName)&limit=1&appid=\(apiKey)"
         guard let url = URL(string: urlString) else { return nil }
 
@@ -43,27 +49,5 @@ extension WeatherService {
             print(error)
             return nil
         }
-    }
-    
-    /// 위경도로 날씨 데이터 반환
-    func getCrntWeatherDataForCoordinates(lat: Double, lon: Double, completion: @escaping (CrntWeatherData?) -> Void) {
-        let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(lat)&lon=\(lon)&appid=\(apiKey)&lang=\("kr")"
-        guard let url = URL(string: urlString) else { return }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print(error)
-                return
-            }
-            
-            guard let data = data else { return }
-            
-            do {
-                let weatherResponse = try JSONDecoder().decode(CrntWeatherData.self, from: data)
-                completion(weatherResponse)
-            } catch {
-                print(error)
-            }
-        }.resume()
     }
 }
