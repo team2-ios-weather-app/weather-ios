@@ -8,7 +8,7 @@
 import UIKit
 import CoreLocation
 
-class MainViewController: UIViewController, CLLocationManagerDelegate {
+class MainViewController: UIViewController {
     
     var locationManager: CLLocationManager!
     var weatherService = WeatherService()
@@ -27,7 +27,10 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         setupLocationManager()
         setupUI()
     }
-    
+}
+
+//MARK: - Views
+extension MainViewController {
     private func setupLocationManager() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -72,6 +75,22 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         ])
     }
     
+    func updateWeatherInfo(_ weatherData: CrntWeatherData?) {
+        guard let weatherData = weatherData else {
+            temperatureLabel.text = "날씨 정보를 가져올 수 없습니다."
+            return
+        }
+        
+        let temperature = weatherData.main?.temp ?? 0
+        let weatherStatus = weatherData.weather?.first?.description ?? "정보 없음"
+        let cityName = weatherData.name ?? "알 수 없는 도시"
+        
+        temperatureLabel.text = "도시: \(cityName)\n온도: \(temperature)°C\n상태: \(weatherStatus)"
+    }
+}
+
+//MARK: - Actions
+extension MainViewController {
     @objc private func updateCurrentWeather() {
         if CLLocationManager.locationServicesEnabled() {
             locationManager.startUpdatingLocation()
@@ -84,6 +103,21 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
             DispatchQueue.main.async {
                 self.updateWeatherInfo(crntWeather)
             }
+        }
+    }
+}
+
+//MARK: - CLLocationManagerDelegate
+extension MainViewController: CLLocationManagerDelegate {
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        switch manager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways:
+            print("위치 서비스 권한이 허용됨")
+            locationManager.startUpdatingLocation()
+        case .notDetermined, .restricted, .denied:
+            print("위치 서비스 권한이 없거나 제한됨")
+        @unknown default:
+            print("알 수 없는 새로운 권한 상태")
         }
     }
     
@@ -99,31 +133,6 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
                 }
             }
         }
-    }
-    
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        switch manager.authorizationStatus {
-        case .authorizedWhenInUse, .authorizedAlways:
-            print("위치 서비스 권한이 허용됨")
-            locationManager.startUpdatingLocation()
-        case .notDetermined, .restricted, .denied:
-            print("위치 서비스 권한이 없거나 제한됨")
-        @unknown default:
-            print("알 수 없는 새로운 권한 상태")
-        }
-    }
-    
-    func updateWeatherInfo(_ weatherData: CrntWeatherData?) {
-        guard let weatherData = weatherData else {
-            temperatureLabel.text = "날씨 정보를 가져올 수 없습니다."
-            return
-        }
-        
-        let temperature = weatherData.main?.temp ?? 0
-        let weatherStatus = weatherData.weather?.first?.description ?? "정보 없음"
-        let cityName = weatherData.name ?? "알 수 없는 도시"
-        
-        temperatureLabel.text = "도시: \(cityName)\n온도: \(temperature)°C\n상태: \(weatherStatus)"
     }
 }
 
