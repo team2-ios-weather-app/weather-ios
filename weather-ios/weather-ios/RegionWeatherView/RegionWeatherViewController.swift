@@ -41,14 +41,13 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WeatherCell.identifier, for: indexPath) as! WeatherCell
         let weatherData = weatherDatas[indexPath.row]
-        // 날씨 정보
         cell.configure(with: weatherData)
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
+        return 120.0
     }
 }
 
@@ -72,7 +71,7 @@ extension RegionWeatherVC: UISearchBarDelegate {
     }
     
     func fetchAndDisplayWeather(for cityName: String) async {
-        let weatherData = await WeatherService().getCrntWeatherDataForCity(cityName)
+        let weatherData = await WeatherService().getCrntWeatherData(cityName: cityName)
         DispatchQueue.main.async {
             self.updateTableView(with: weatherData)
         }
@@ -93,11 +92,11 @@ extension RegionWeatherVC {
     
     private func autoLayouts() {
         regionSearchBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100)
             make.left.right.equalTo(view)
         }
         regionTableView.snp.makeConstraints { make in
-            make.top.equalTo(regionSearchBar.snp.bottom).offset(100)
+            make.top.equalTo(regionSearchBar.snp.bottom).offset(50)
             make.left.right.bottom.equalToSuperview()
         }
     }
