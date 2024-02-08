@@ -25,7 +25,8 @@ class RegionWeatherVC: UIViewController {
         regionTableView = UITableView(frame: .zero, style: .plain)
         regionTableView.delegate = self
         regionTableView.dataSource = self
-        regionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "WeatherCell")
+        regionTableView.translatesAutoresizingMaskIntoConstraints = false
+        regionTableView.register(WeatherCell.self, forCellReuseIdentifier: WeatherCell.identifier)
     }
     
     // 날씨 데이터를 불러올 함수, 액션 추가
@@ -38,15 +39,16 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: WeatherCell.identifier, for: indexPath) as! WeatherCell
         let weatherData = weatherDatas[indexPath.row]
         // 날씨 정보
-        let temperature = weatherData.main?.temp ?? 0
-        let weatherStatus = weatherData.weather?.first?.description ?? "정보를 찾을 수 없습니다."
-        let cityName = weatherData.name ?? "알 수 없는 도시"
-        cell.textLabel?.text = "도시: \(cityName), 온도: \(temperature)°C, 날씨: \(weatherStatus)"
+        cell.configure(with: weatherData)
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100.0
     }
 }
 
