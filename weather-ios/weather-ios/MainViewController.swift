@@ -8,7 +8,7 @@
 import UIKit
 import CoreLocation
 
-class MainViewController: UIViewController, CLLocationManagerDelegate {
+class MainViewController: UIViewController {
     
     var locationManager: CLLocationManager!
     var weatherService = WeatherService()
@@ -27,7 +27,10 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         setupLocationManager()
         setupUI()
     }
-    
+}
+
+//MARK: - Views
+extension MainViewController {
     private func setupLocationManager() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -72,6 +75,22 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         ])
     }
     
+    func updateWeatherInfo(_ weatherData: CrntWeatherData?) {
+        guard let weatherData = weatherData else {
+            temperatureLabel.text = "날씨 정보를 가져올 수 없습니다."
+            return
+        }
+        
+        let temperature = weatherData.main?.temp ?? 0
+        let weatherStatus = weatherData.weather?.first?.description ?? "정보 없음"
+        let cityName = weatherData.name ?? "알 수 없는 도시"
+        
+        temperatureLabel.text = "도시: \(cityName)\n온도: \(temperature)°C\n상태: \(weatherStatus)"
+    }
+}
+
+//MARK: - Actions
+extension MainViewController {
     @objc private func updateCurrentWeather() {
         if CLLocationManager.locationServicesEnabled() {
             locationManager.startUpdatingLocation()
@@ -80,26 +99,16 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     
     @objc private func requestWeatherUpdate() {
         Task {
-            let crntWeather = await weatherService.getCrntWeatherDataForCity("사하구")
+            let crntWeather = await weatherService.getCrntWeatherData(cityName: "수영구")
             DispatchQueue.main.async {
                 self.updateWeatherInfo(crntWeather)
             }
         }
     }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            print("현재 위치: 위도 \(location.coordinate.latitude), 경도 \(location.coordinate.longitude)")
-            locationManager.stopUpdatingLocation()
-            
-            weatherService.getCrntWeatherDataForCoordinates(lat: location.coordinate.latitude, lon: location.coordinate.longitude) { [weak self] weatherData in
-                DispatchQueue.main.async {
-                    self?.updateWeatherInfo(weatherData)
-                }
-            }
-        }
-    }
-    
+}
+
+//MARK: - CLLocationManagerDelegate
+extension MainViewController: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
@@ -112,17 +121,18 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    func updateWeatherInfo(_ weatherData: CrntWeatherData?) {
-        guard let weatherData = weatherData else {
-            temperatureLabel.text = "날씨 정보를 가져올 수 없습니다."
-            return
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            print("현재 위치: 위도 \(location.coordinate.latitude), 경도 \(location.coordinate.longitude)")
+            locationManager.stopUpdatingLocation()
+            
+            Task {
+                let weatherData = await weatherService.getCrntWeatherData(coordinate: .init(lat: location.coordinate.latitude, lon: location.coordinate.longitude))
+                DispatchQueue.main.async {
+                    self.updateWeatherInfo(weatherData)
+                }
+            }
         }
-        
-        let temperature = weatherData.main?.temp ?? 0
-        let weatherStatus = weatherData.weather?.first?.description ?? "정보 없음"
-        let cityName = weatherData.name ?? "알 수 없는 도시"
-        
-        temperatureLabel.text = "도시: \(cityName)\n온도: \(temperature)°C\n상태: \(weatherStatus)"
     }
 }
 
