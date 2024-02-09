@@ -5,12 +5,21 @@ import SnapKit
 class RegionWeatherVC: UIViewController {
     private lazy var regionTableView = UITableView()
     private lazy var weatherService = WeatherService()
+    private lazy var regionTitleButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("지역별 날씨", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .semibold)
+        button.layer.cornerRadius = 10
+        return button
+    }()
     private lazy var regionSearchBar: UISearchBar = {
         let search = UISearchBar()
         search.placeholder = "지역 검색"
         search.delegate = self
         return search
     }()
+    
     var weatherDatas: [CrntWeatherData] = []
     
     override func viewDidLoad() {
@@ -19,6 +28,7 @@ class RegionWeatherVC: UIViewController {
         setupRegionTableView()
         addSubViews()
         autoLayouts()
+        keyBoardHide()
     }
     
     private func setupRegionTableView() {
@@ -87,12 +97,16 @@ extension RegionWeatherVC: UISearchBarDelegate {
 
 extension RegionWeatherVC {
     private func addSubViews() {
-        view.addSubViews([regionTableView, regionSearchBar,])
+        view.addSubViews([regionTableView, regionSearchBar, regionTitleButton])
     }
     
     private func autoLayouts() {
+        regionTitleButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            make.left.right.equalTo(view)
+        }
         regionSearchBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100)
+            make.top.equalTo(regionTitleButton.snp.top).offset(80)
             make.left.right.equalTo(view)
         }
         regionTableView.snp.makeConstraints { make in
