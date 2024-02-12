@@ -22,15 +22,41 @@ class MainViewController: UIViewController {
         return label
     }()
     
+    private var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLocationManager()
-        setupUI()
+//        setupLocationManager()
+//        setupUI()
+        
+        setUpTableView()
+        view.addSubview(tableView)
+        
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        ])
     }
 }
 
 //MARK: - Views
 extension MainViewController {
+    private func setUpTableView() {
+        tableView = UITableView(frame: .zero, style: .plain)
+        tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.allowsSelection = false
+        tableView.separatorStyle = .none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(TopWeatherViewCell.self, forCellReuseIdentifier: TopWeatherViewCell.description())
+        tableView.register(LabelViewCell.self, forCellReuseIdentifier: LabelViewCell.description())
+        
+    }
+    
     private func setupLocationManager() {
         locationManager = CLLocationManager()
         locationManager.delegate = self
@@ -74,19 +100,6 @@ extension MainViewController {
             testLocationWeatherButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50)
         ])
     }
-    
-    func updateWeatherInfo(_ weatherData: CrntWeatherData?) {
-        guard let weatherData = weatherData else {
-            temperatureLabel.text = "날씨 정보를 가져올 수 없습니다."
-            return
-        }
-        
-        let temperature = weatherData.main?.temp ?? 0
-        let weatherStatus = weatherData.weather?.first?.description ?? "정보 없음"
-        let cityName = weatherData.name ?? "알 수 없는 도시"
-        
-        temperatureLabel.text = "도시: \(cityName)\n온도: \(temperature)°C\n상태: \(weatherStatus)"
-    }
 }
 
 //MARK: - Actions
@@ -104,6 +117,19 @@ extension MainViewController {
                 self.updateWeatherInfo(crntWeather)
             }
         }
+    }
+    
+    func updateWeatherInfo(_ weatherData: CrntWeatherData?) {
+        guard let weatherData = weatherData else {
+            temperatureLabel.text = "날씨 정보를 가져올 수 없습니다."
+            return
+        }
+        
+        let temperature = weatherData.main?.temp ?? 0
+        let weatherStatus = weatherData.weather?.first?.description ?? "정보 없음"
+        let cityName = weatherData.name ?? "알 수 없는 도시"
+        
+        temperatureLabel.text = "도시: \(cityName)\n온도: \(temperature)°C\n상태: \(weatherStatus)"
     }
 }
 
@@ -136,4 +162,58 @@ extension MainViewController: CLLocationManagerDelegate {
     }
 }
 
+//MARK: - UITableView DataSource
+extension MainViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 4
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        switch indexPath.row {
+        case 0:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TopWeatherViewCell.description(), for: indexPath) as? TopWeatherViewCell else { return UITableViewCell() }
+            cell.configure(.sunny, "17C", "부산")
+            return cell
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
+            cell.mainTitle.text = 
+                                """
+                                                                                                                                                                                                                                                                                                                                  -------------------------
 
+                                                                                                                                                여기다가
+
+                                                                                                                                        날씨 디테일 뷰 추가 하면 될듯요.
+                                                                                                                                                                                                                                                                                                -------------------------
+
+
+
+"""
+                                
+            return cell
+        case 2:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
+            cell.contentView.backgroundColor = .blue
+            cell.mainTitle.text = "한국 지도 날씨"
+            return cell
+        case 3:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
+            cell.contentView.backgroundColor = .red
+            cell.mainTitle.text = "추가한 지역 목록"
+            return cell
+        default:
+            return UITableViewCell()
+        }
+    }
+}
+
+//MARK: - UITableView Delegate
+extension MainViewController: UITableViewDelegate {
+    
+}
+
+
+@available(iOS 17, *)
+#Preview("", traits: .defaultLayout) {
+    return MainViewController()
+}
