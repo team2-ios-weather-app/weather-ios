@@ -11,3 +11,11 @@ extension UIViewController{
         view.endEditing(true)
     }
 }
+
+// addSubView 커스텀
+extension UIView {
+    func addSubViews(_ views : [UIView]) {
+        _ = views.map{self.addSubview($0)}
+    }
+}
+

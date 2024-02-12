@@ -56,6 +56,12 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    // 뷰 전환(메인화면으로 전환)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        <#code#>
+    }
+    
+    // 셀 높이
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120.0
     }
@@ -92,6 +98,23 @@ extension RegionWeatherVC: UISearchBarDelegate {
         weatherDatas.append(weatherData)
         regionTableView.reloadData()
     }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        DispatchQueue.main.async {
+            Task {
+                UIView.animate(withDuration: 0.3) {
+                    // SeachBar 탭 했을 때 Bar 높이 1.5배로 조정
+                    searchBar.transform = CGAffineTransform(scaleX: 1.0, y: 1.5)
+                }
+            }
+        }
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        UIView.animate(withDuration: 0.3) {
+            searchBar.transform = CGAffineTransform.identity
+        }
+    }
 }
 
 
@@ -110,14 +133,13 @@ extension RegionWeatherVC {
             make.left.right.equalTo(view)
         }
         regionTableView.snp.makeConstraints { make in
-            make.top.equalTo(regionSearchBar.snp.bottom).offset(50)
-            make.left.right.bottom.equalToSuperview()
+            make.top.equalTo(regionSearchBar.snp.bottom).offset(30)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
 }
 
 
-@available(iOS 17, *)
-#Preview("", traits: .defaultLayout) {
-    return RegionWeatherVC()
-}
+
