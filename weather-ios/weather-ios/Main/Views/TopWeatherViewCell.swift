@@ -34,13 +34,14 @@ class TopWeatherViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupViews()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
+    private func setupViews() {
         let container = {
             let view = VStackView(spacing: 14, alignment: .fill, distribution: .fill,[
                 weatherImageView,
@@ -63,11 +64,5 @@ class TopWeatherViewCell: UITableViewCell {
             container.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
         ])
-    }
-    
-    func configure(_ weatherImage: UIImage,_ temp: String ,_ userLocation: String) {
-        weatherImageView.image = weatherImage
-        tempLabel.text = temp
-        regionLabel.text = userLocation
     }
 }
