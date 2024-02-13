@@ -7,7 +7,7 @@
 
 /// Current weather data
 struct CrntWeatherData: Decodable {
-    let coord: Coordinate? // 좌표 값
+    var coord: Coordinate? // 좌표 값
     let weather: [Weather]?
     let main: Main?
     let visibility: Int?
