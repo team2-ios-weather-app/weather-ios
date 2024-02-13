@@ -21,6 +21,7 @@ class MapViewController: UIViewController {
         (36.8214, 127.1523), // 천안
         (36.3504, 127.3845), // 대전
         (37.1326, 128.2141), // 제천
+        (34.8092, 126.3943), // 목포
         (35.9451, 126.9542), // 군산
         (35.8242, 127.1480), // 전주
         (36.1194, 128.3445), // 구미
@@ -39,20 +40,32 @@ class MapViewController: UIViewController {
     var weatherService = WeatherService()
     
     private let myMapButton: UIButton = {
-        let button = UIButton(type: .custom)
+        let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("저장된 지역 날씨 보기", for: .normal)
+        button.setTitle("📍 저장된 지역 날씨 보기", for: .normal)
+        button.setTitleColor(UIColor.black, for: .normal)
+        
         button.backgroundColor = .lightGray
         button.layer.cornerRadius = 10
         return button
     }()
     
     private let totalMapButton: UIButton = {
-        let button = UIButton(type: .custom)
+        let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("전체 지역 날씨 보기", for: .normal)
+        button.setTitle("🌍 전체 지역 날씨 보기", for: .normal)
+        button.setTitleColor(UIColor.black, for: .normal)
+        button.addTarget(target, action: #selector(addMarkers), for: .touchUpInside)
         button.backgroundColor = .lightGray
         button.layer.cornerRadius = 10
+        return button
+    }()
+    
+    private let updateMapButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named: "Update"), for: .normal)
+        button.addTarget(target, action: #selector(addMarkers), for: .touchUpInside)
         return button
     }()
     
@@ -70,8 +83,6 @@ class MapViewController: UIViewController {
         addSubView()
         setupMap()
         setupUI()
-        addMarkers()
-        
     }
     
     private func addSubView() {
@@ -79,6 +90,7 @@ class MapViewController: UIViewController {
         view.addSubview(naverMapView)
         view.addSubview(myMapButton)
         view.addSubview(totalMapButton)
+        view.addSubview(updateMapButton)
     }
     
     private func setupUI() {
@@ -90,6 +102,11 @@ class MapViewController: UIViewController {
             totalMapButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             totalMapButton.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor, constant: 5),
             totalMapButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -10),
+            
+            updateMapButton.topAnchor.constraint(equalTo: self.naverMapView.topAnchor, constant: 5),
+            updateMapButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -5),
+            updateMapButton.widthAnchor.constraint(equalToConstant: 35),
+            updateMapButton.heightAnchor.constraint(equalToConstant: 35),
             
             naverMapView.topAnchor.constraint(equalTo: self.myMapButton.bottomAnchor, constant: 10),
             naverMapView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
@@ -109,6 +126,7 @@ class MapViewController: UIViewController {
         naverMapView.moveCamera(cameraUpdate)
     }
     
+    @objc
     private func addMarkers() {
         for coordinate in cityCoordinates {
             let coordinate = Coordinate(lat: coordinate.0, lon: coordinate.1)
