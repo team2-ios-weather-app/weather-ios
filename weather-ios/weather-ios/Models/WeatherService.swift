@@ -8,7 +8,6 @@
 import Foundation
 
 class WeatherService {
-    private let apiKey = "44d36268ccbf0ac21e73ee116dfc87d9"
     
 }
 
@@ -20,7 +19,7 @@ extension WeatherService {
         if let cityName = cityName { coordinate = await getCoordinateFor(cityName) }
             
         if let coordinate = coordinate {
-            let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.lat)&lon=\(coordinate.lon)&appid=\(apiKey)&lang=kr&units=metric"
+            let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.lat)&lon=\(coordinate.lon)&appid=\(Secrets.openWeatherMapAPIKey)&lang=kr&units=metric"
             guard let url = URL(string: urlString) else { return nil }
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
@@ -38,7 +37,7 @@ extension WeatherService {
     
     /// 도시 이름 넣으면 좌표 데이터 반환
     func getCoordinateFor(_ cityName: String) async -> Coordinate? {
-        let urlString = "http://api.openweathermap.org/geo/1.0/direct?q=\(cityName)&limit=1&appid=\(apiKey)"
+        let urlString = "http://api.openweathermap.org/geo/1.0/direct?q=\(cityName)&limit=1&appid=\(Secrets.openWeatherMapAPIKey)"
         guard let url = URL(string: urlString) else { return nil }
 
         do {
