@@ -66,14 +66,13 @@ extension MainViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         switch indexPath.row {
         case 0:
             print(currentWeather?.main?.temp?.description ?? " dasdsa")
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TopWeatherViewCell.description(), for: indexPath) as? TopWeatherViewCell else { return UITableViewCell() }
-            cell.regionLabel.text = currentWeather?.coord?.localNames?.ko ?? "Loading..."
+            cell.regionLabel.text = currentWeather?.coord?.localNames?.ko ?? "로딩중.."
             cell.weatherImageView.image = UIImage(named: currentWeather?.weather?.first?.icon ?? "")
-            cell.tempLabel.text = currentWeather?.main?.temp?.description ?? "Loading..."
+            cell.tempLabel.text = currentWeather?.main?.temp?.description ?? "로딩중.."
             cell.descriptLabel.text = currentWeather?.weather?.first?.description
             return cell
         case 1:

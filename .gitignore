@@ -34,7 +34,7 @@ playground.xcworkspace
 *.moved-aside
 *.xccheckout
 *.xcuserstate
-Secrets.swift
+**/Secrets.swift
 
 Pods/
 *.xcworkspace
