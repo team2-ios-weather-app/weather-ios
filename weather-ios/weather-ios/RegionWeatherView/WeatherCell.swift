@@ -13,7 +13,7 @@ class WeatherCell: UITableViewCell {
     static let identifier = "WeatherCell"
     lazy var cellView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.lightGray
+        //view.backgroundColor = UIColor.lightGray
         view.layer.cornerRadius = 30
         view.clipsToBounds = true
         return view
@@ -49,7 +49,14 @@ class WeatherCell: UITableViewCell {
         label.textColor = UIColor.systemBlue
         return label
     }()
-    lazy var backgroundImage = UIImageView()
+    lazy var backgroundImage: UIImageView = {
+        let image = UIImageView()
+        image.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
+        image.layer.cornerRadius = 30
+        image.clipsToBounds = true
+        return image
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -68,14 +75,13 @@ extension WeatherCell {
         weather.text = weatherData.weather?.first?.description ?? "날씨에 대한 정보를 가져올 수 없습니다."
         tempMinMax.text = "최고 \(Int(weatherData.main?.tempMax ?? 0)) / 촤저 \(Int(weatherData.main?.tempMin ?? 0))"
         updateBackground(for: weatherData.weather?.first?.description ?? "")
-        
     }
     
     private func updateBackground(for weather: String) {
         // 날씨 description에 따라 배경 업데이트.
         switch weather {
         case "맑음":
-            backgroundImage.image = UIImage(named: "01d")
+            backgroundImage.image = UIImage(named: "few clouds")
         case "few clouds":
             backgroundImage.image = UIImage(named: "02d")
         case "scattered clouds":
@@ -99,14 +105,14 @@ extension WeatherCell {
         //animate()
     }
     
-//    private func animate() {
-//        // backgroundImage frame 재설정
-//        backgroundImage.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
-//        // 애니메이션 적용
-//        UIView.animate(withDuration: 30, delay: 0, options: [.repeat, .curveLinear], animations: {
-//            self.backgroundImage.frame = CGRect(x: -self.frame.width, y: 0, width: self.frame.width, height: self.frame.height)
+    private func animate() {
+        // backgroundImage frame 재설정
+        backgroundImage.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
+        // 애니메이션 적용
+//        UIView.animate(withDuration: 100, delay: 0, options: [.repeat, .], animations: {
+//            self.backgroundImage.frame = CGRect(x: self.frame.width, y: 0, width: self.frame.width, height: self.frame.height)
 //        }, completion: nil)
-//    }
+    }
 }
 
 extension WeatherCell {
@@ -127,6 +133,10 @@ extension WeatherCell {
             make.bottom.equalToSuperview().offset(-5)
             make.leading.equalToSuperview().offset(5)
             make.trailing.equalToSuperview().offset(-5)
+        }
+        
+        backgroundImage.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         cityName.snp.makeConstraints { make in

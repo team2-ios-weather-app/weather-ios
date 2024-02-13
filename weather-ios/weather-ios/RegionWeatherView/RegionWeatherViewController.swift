@@ -29,6 +29,7 @@ class RegionWeatherVC: UIViewController {
         addSubViews()
         autoLayouts()
         keyBoardHide()
+        
     }
     
     private func setupRegionTableView() {
@@ -39,7 +40,16 @@ class RegionWeatherVC: UIViewController {
         regionTableView.register(WeatherCell.self, forCellReuseIdentifier: WeatherCell.identifier)
     }
     
-    // 날씨 데이터를 불러올 함수, 액션 추가
+//    func loadWeatherData() {
+//        guard let savedRegions = UserDefaults.standard.object(forKey: "SavedRegions") as? [String] else { return }
+//        for region in savedRegions {
+//            let key = "WeatherData_\(region)"
+//            if let savedData = UserDefaults.standard.data(forKey: key),
+//               let decodedData = try? JSONDecoder().decode(WeatherDataModel.self, from: savedData) {
+//                weatherDatas.append(decodedData)
+//            } 
+//        }
+//    }
 }
 
 // MARK: -UITableViewDataSource,UITableViewDelegate
@@ -57,9 +67,9 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     // 뷰 전환(메인화면으로 전환)
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        <#code#>
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        <#code#>
+//    }
     
     // 셀 높이
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -91,12 +101,14 @@ extension RegionWeatherVC: UISearchBarDelegate {
         DispatchQueue.main.async {
             self.updateTableView(with: weatherData)
         }
+        //print("\(String(describing: weatherData))")
     }
     
     func updateTableView(with weatherData: CrntWeatherData?) {
         guard let weatherData = weatherData else { return }
         weatherDatas.append(weatherData)
         regionTableView.reloadData()
+        print("값 \(weatherData.name ?? "")")
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -105,6 +117,7 @@ extension RegionWeatherVC: UISearchBarDelegate {
                 UIView.animate(withDuration: 0.3) {
                     // SeachBar 탭 했을 때 Bar 높이 1.5배로 조정
                     searchBar.transform = CGAffineTransform(scaleX: 1.0, y: 1.5)
+                    
                 }
             }
         }
