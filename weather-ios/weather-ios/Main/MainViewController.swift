@@ -27,8 +27,6 @@ class MainViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         ])
-        
-        
     }
 }
 
@@ -46,16 +44,29 @@ extension MainViewController {
     }
     
     private func setNavigationView() {
-        navigationItem.setRightBarButton(.init(systemItem: .add), animated: true)
+        let unitToggleItem = {
+            let item = UIBarButtonItem(title: "", primaryAction: .init(handler: { _ in
+                UserSettings.shared.weatherUnitToggle()
+                self.updateWeatherInfo()
+            }))
+            return item
+        }()
+            
+        navigationItem.setRightBarButton(unitToggleItem, animated: true)
         navigationItem.title = "로딩중.."
     }
     
     private func updateWeatherInfo() {
         Task {
-//            currentWeather = await weatherService.getCrntWeatherData(cityName: "강남", unit: UserSettings.weatherUnit ?? .metric)
+//            currentWeather = await weatherService.getCrntWeatherData(cityName: UserSettings.curntRegionName, unit: UserSettings.weatherUnit ?? .metric) // 서비스용
             currentWeather = await WeatherService.testGetCrntWeatherData() // 테스트용
-            navigationItem.title = currentWeather?.coord?.localNames?.ko
+            
             DispatchQueue.main.async {
+                self.navigationItem.title = self.currentWeather?.coord?.localNames?.ko
+                var itemText = ""
+                if UserSettings.shared.weatherUnit == .metric { itemText = " °C" }
+                else if UserSettings.shared.weatherUnit == .imperial { itemText = " °F" }
+                self.navigationItem.rightBarButtonItem?.title = itemText
                 self.tableView.reloadData()
             }
         }
@@ -77,9 +88,9 @@ extension MainViewController: UITableViewDataSource {
                 cell.tempLabel.text = currentWeather.main?.temp?.description
                 
                 if let _ = cell.tempLabel.text {
-                    if UserSettings.weatherUnit == .metric {
+                    if UserSettings.shared.weatherUnit == .metric {
                         cell.tempLabel.text! += " °C"
-                    } else if UserSettings.weatherUnit == .imperial {
+                    } else if UserSettings.shared.weatherUnit == .imperial {
                         cell.tempLabel.text! += " °F"
                     }
                 }
@@ -106,11 +117,11 @@ extension MainViewController: UITableViewDataSource {
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
-            cell.mainTitle.text = "한국 지도 날씨"
+            cell.mainTitle.text = "한국 지도 날씨 보기"
             return cell
         case 3:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
-            cell.mainTitle.text = "추가한 지역 목록"
+            cell.mainTitle.text = "추가한 지역 목록 보기"
             return cell
         default:
             return UITableViewCell()
