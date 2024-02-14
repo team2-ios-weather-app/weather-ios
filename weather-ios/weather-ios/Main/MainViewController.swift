@@ -58,15 +58,12 @@ extension MainViewController {
     
     private func updateWeatherInfo() {
         Task {
-//            currentWeather = await weatherService.getCrntWeatherData(cityName: UserSettings.curntRegionName, unit: UserSettings.weatherUnit ?? .metric) // 서비스용
+//            currentWeather = await weatherService.getCrntWeatherData(regionName: UserSettings.shared.selectedRegion, unit: UserSettings.shared.weatherUnit) // 서비스용
             currentWeather = await WeatherService.testGetCrntWeatherData() // 테스트용
             
             DispatchQueue.main.async {
                 self.navigationItem.title = self.currentWeather?.coord?.localNames?.ko
-                var itemText = ""
-                if UserSettings.shared.weatherUnit == .metric { itemText = " °C" }
-                else if UserSettings.shared.weatherUnit == .imperial { itemText = " °F" }
-                self.navigationItem.rightBarButtonItem?.title = itemText
+                self.navigationItem.rightBarButtonItem?.title = UserSettings.shared.weatherUnit == .metric ? " °C" : " °F"
                 self.tableView.reloadData()
             }
         }
@@ -86,18 +83,9 @@ extension MainViewController: UITableViewDataSource {
             if let currentWeather = currentWeather {
                 cell.weatherImageView.image = UIImage(named: currentWeather.weather?.first?.icon ?? "")
                 cell.tempLabel.text = currentWeather.main?.temp?.description
-                
-                if let _ = cell.tempLabel.text {
-                    if UserSettings.shared.weatherUnit == .metric {
-                        cell.tempLabel.text! += " °C"
-                    } else if UserSettings.shared.weatherUnit == .imperial {
-                        cell.tempLabel.text! += " °F"
-                    }
-                }
-                
+                cell.tempLabel.text? += UserSettings.shared.weatherUnit == .metric ? " °C" : " °F"
                 cell.descriptLabel.text = currentWeather.weather?.first?.description
             }
-            
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
@@ -113,7 +101,6 @@ extension MainViewController: UITableViewDataSource {
 
 
 """
-                                
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }

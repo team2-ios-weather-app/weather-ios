@@ -9,19 +9,14 @@ import Foundation
 
 class WeatherService {
     
-    
-    enum Units: String {
-        case metric = "metric"
-        case imperial = "imperial"
-    }
 }
 
 //MARK: - Requests
 extension WeatherService {
     /// 도시 이름 또는 좌표 둘 중 하나만 넣으면 현재 날씨 데이터 반환
-    func getCrntWeatherData(cityName: String? = nil, coordinate: Coordinate? = nil, unit: Units) async -> CrntWeatherData? {
+    func getCrntWeatherData(regionName: String? = nil, coordinate: Coordinate? = nil, unit: UserSettings.Units) async -> CrntWeatherData? {
         var coordinate = coordinate
-        if let cityName = cityName { coordinate = await getCoordinateFor(cityName) }
+        if let regionName = regionName { coordinate = await getCoordinateFor(regionName) }
             
         if let coordinate = coordinate {
             let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.lat)&lon=\(coordinate.lon)&appid=\(Secrets.openWeatherMapAPIKey)&lang=kr&units=\(unit.rawValue)"
@@ -42,8 +37,8 @@ extension WeatherService {
     }
     
     /// 도시 이름 넣으면 좌표 데이터 반환
-    func getCoordinateFor(_ cityName: String) async -> Coordinate? {
-        let urlString = "http://api.openweathermap.org/geo/1.0/direct?q=\(cityName)&limit=1&appid=\(Secrets.openWeatherMapAPIKey)"
+    func getCoordinateFor(_ regionName: String) async -> Coordinate? {
+        let urlString = "http://api.openweathermap.org/geo/1.0/direct?q=\(regionName)&limit=1&appid=\(Secrets.openWeatherMapAPIKey)"
         guard let url = URL(string: urlString) else { return nil }
 
         do {
