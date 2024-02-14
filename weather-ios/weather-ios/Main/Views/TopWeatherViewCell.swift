@@ -55,6 +55,7 @@ class TopWeatherViewCell: UITableViewCell {
                 weatherImageView,
                 descriptLabel,
                 tempLabel,
+
                 {
                     let view = UIView()
                     view.heightAnchor.constraint(equalToConstant: 50).isActive = true

@@ -44,7 +44,7 @@ extension MainViewController {
         tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.allowsSelection = false
+        tableView.allowsSelection = true
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(TopWeatherViewCell.self, forCellReuseIdentifier: TopWeatherViewCell.description())
@@ -68,7 +68,7 @@ extension MainViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TopWeatherViewCell.description(), for: indexPath) as? TopWeatherViewCell else { return UITableViewCell() }
-            
+//            cell.selectionStyle = .none
             
             cell.regionLabel.text = currentWeather?.coord?.localNames?.ko ?? "로딩중..."
             if let currentWeather = currentWeather {
@@ -78,11 +78,10 @@ extension MainViewController: UITableViewDataSource {
                 
             }
             
-            
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
-            cell.mainTitle.text = 
+            cell.mainTitle.text =
                                 """
                                                                                                                                                                                                                                                                                                                                   -------------------------
 
@@ -112,9 +111,29 @@ extension MainViewController: UITableViewDataSource {
 
 //MARK: - UITableView Delegate
 extension MainViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        let alloedCell: Set<Int> = [2, 3]
+        if alloedCell.contains(indexPath.row) {
+            return indexPath
+        } else {
+            return nil
+        }
+    }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        switch indexPath.row {
+        case 2:
+            let mapVC = MapViewController()
+            present(mapVC, animated: true)
+        case 3:
+            let regionVC = RegionWeatherVC()
+            present(regionVC, animated: true)
+        default:
+            return
+        }
+    }
 }
-
 
 @available(iOS 17, *)
 #Preview("", traits: .defaultLayout) {
