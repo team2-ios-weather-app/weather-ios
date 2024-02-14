@@ -8,7 +8,6 @@
 import Foundation
 
 class WeatherService {
-    private let apiKey = "44d36268ccbf0ac21e73ee116dfc87d9"
     
 }
 
@@ -20,11 +19,12 @@ extension WeatherService {
         if let cityName = cityName { coordinate = await getCoordinateFor(cityName) }
             
         if let coordinate = coordinate {
-            let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.lat)&lon=\(coordinate.lon)&appid=\(apiKey)&lang=kr&units=metric"
+            let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.lat)&lon=\(coordinate.lon)&appid=\(Secrets.openWeatherMapAPIKey)&lang=kr&units=metric"
             guard let url = URL(string: urlString) else { return nil }
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
-                let weatherResponse = try JSONDecoder().decode(CrntWeatherData.self, from: data)
+                var weatherResponse = try JSONDecoder().decode(CrntWeatherData.self, from: data)
+                weatherResponse.coord = coordinate
                 return weatherResponse
             } catch {
                 print(error)
@@ -38,7 +38,7 @@ extension WeatherService {
     
     /// 도시 이름 넣으면 좌표 데이터 반환
     func getCoordinateFor(_ cityName: String) async -> Coordinate? {
-        let urlString = "http://api.openweathermap.org/geo/1.0/direct?q=\(cityName)&limit=1&appid=\(apiKey)"
+        let urlString = "http://api.openweathermap.org/geo/1.0/direct?q=\(cityName)&limit=1&appid=\(Secrets.openWeatherMapAPIKey)"
         guard let url = URL(string: urlString) else { return nil }
 
         do {
@@ -49,5 +49,41 @@ extension WeatherService {
             print(error)
             return nil
         }
+    }
+}
+
+//MARK: - Helpers
+extension WeatherService {
+    static func testGetCrntWeatherData() -> CrntWeatherData { // 사용 예시: WeatherService.testGetCrntWeatherData()
+        return CrntWeatherData(coord: .init(lat: 35.1811, lon: 129.0928, localNames: .init(en: nil, ko: "연산동")),
+                               weather: [.init(id: 803,
+                                               main: "Clouds",
+                                               description: "튼구름",
+                                               icon: "04n")],
+                               main: .init(temp: 5.4,
+                                           feelsLike: 4.35,
+                                           tempMin: 5.4,
+                                           tempMax: 5.4,
+                                           pressure: 1026,
+                                           humidity: 87,
+                                           seaLevel: 1025,
+                                           grndLevel: 1022),
+                               visibility: 9000,
+                               wind: .init(speed: 1.54,
+                                           deg: 150,
+                                           gust: 5.19),
+                               clouds: .init(all: 75),
+                               rain: nil,
+                               snow: nil,
+                               dt: 1707849634,
+                               sys: .init(type: nil,
+                                          id: nil,
+                                          country: "KR",
+                                          sunrise: 1707862330,
+                                          sunset: 1707901423),
+                               timezone: 32400,
+                               id: 1838519,
+                               name: "Busan",
+                               cod: 200)
     }
 }
