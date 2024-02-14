@@ -80,6 +80,7 @@ extension MainViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TopWeatherViewCell.description(), for: indexPath) as? TopWeatherViewCell else { return UITableViewCell() }
+            cell.selectionStyle = .none
             if let currentWeather = currentWeather {
                 cell.weatherImageView.image = UIImage(named: currentWeather.weather?.first?.icon ?? "")
                 cell.tempLabel.text = currentWeather.main?.temp?.description
@@ -89,6 +90,7 @@ extension MainViewController: UITableViewDataSource {
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
+            cell.selectionStyle = .none
             cell.mainTitle.text =
                                 """
                                                                                                                                                                                                                                                                                                                                   -------------------------
@@ -104,10 +106,12 @@ extension MainViewController: UITableViewDataSource {
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
+            cell.selectionStyle = .gray
             cell.mainTitle.text = "한국 지도 날씨 보기"
             return cell
         case 3:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
+            cell.selectionStyle = .gray
             cell.mainTitle.text = "추가한 지역 목록 보기"
             return cell
         default:
@@ -119,8 +123,8 @@ extension MainViewController: UITableViewDataSource {
 //MARK: - UITableViewDelegate
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        let alloedCell: Set<Int> = [2, 3]
-        if alloedCell.contains(indexPath.row) {
+        let allowedCell: Set<Int> = [2, 3]
+        if allowedCell.contains(indexPath.row) {
             return indexPath
         } else {
             return nil
