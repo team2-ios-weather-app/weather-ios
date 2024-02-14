@@ -9,17 +9,22 @@ import Foundation
 
 class WeatherService {
     
+    
+    enum Units: String {
+        case metric = "metric"
+        case imperial = "imperial"
+    }
 }
 
 //MARK: - Requests
 extension WeatherService {
     /// 도시 이름 또는 좌표 둘 중 하나만 넣으면 현재 날씨 데이터 반환
-    func getCrntWeatherData(cityName: String? = nil, coordinate: Coordinate? = nil) async -> CrntWeatherData? {
+    func getCrntWeatherData(cityName: String? = nil, coordinate: Coordinate? = nil, unit: Units) async -> CrntWeatherData? {
         var coordinate = coordinate
         if let cityName = cityName { coordinate = await getCoordinateFor(cityName) }
             
         if let coordinate = coordinate {
-            let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.lat)&lon=\(coordinate.lon)&appid=\(Secrets.openWeatherMapAPIKey)&lang=kr&units=metric"
+            let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.lat)&lon=\(coordinate.lon)&appid=\(Secrets.openWeatherMapAPIKey)&lang=kr&units=\(unit.rawValue)"
             guard let url = URL(string: urlString) else { return nil }
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
@@ -54,13 +59,12 @@ extension WeatherService {
 
 //MARK: - Helpers
 extension WeatherService {
-    static func testGetCrntWeatherData() async -> CrntWeatherData? { // 사용 예시: WeatherService.testGetCrntWeatherData()
+    static func testGetCrntWeatherData() async -> CrntWeatherData? {
         do {
-            try await Task.sleep(nanoseconds: 700000000)
+            try await Task.sleep(nanoseconds: 900000000)
         } catch {
             print(error.localizedDescription)
         }
-        
         
         return CrntWeatherData(coord: .init(lat: 35.1811, lon: 129.0928, localNames: .init(en: nil, ko: "연산동")),
                                weather: [.init(id: 803,

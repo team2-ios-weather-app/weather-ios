@@ -53,10 +53,8 @@ class TopWeatherViewCell: UITableViewCell {
             let view = VStackView(spacing: 14, alignment: .center, distribution: .fill,[
                 regionLabel,
                 weatherImageView,
-                HStackView(alignment: .center, distribution: .fillEqually, [
-                    tempLabel,
-                    descriptLabel,
-                ]),
+                descriptLabel,
+                tempLabel,
                 {
                     let view = UIView()
                     view.heightAnchor.constraint(equalToConstant: 50).isActive = true
