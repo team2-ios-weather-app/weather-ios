@@ -20,21 +20,14 @@ class TopWeatherViewCell: UITableViewCell {
     
     let tempLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 26, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
         label.textAlignment = .center
         return label
     }()
     
     let descriptLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 26, weight: .regular)
-        label.textAlignment = .center
-        return label
-    }()
-    
-    let regionLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 24, weight: .regular)
         label.textAlignment = .center
         return label
     }()
@@ -51,7 +44,6 @@ class TopWeatherViewCell: UITableViewCell {
     private func setupViews() {
         let container = {
             let view = VStackView(spacing: 14, alignment: .center, distribution: .fill,[
-                regionLabel,
                 weatherImageView,
                 descriptLabel,
                 tempLabel,

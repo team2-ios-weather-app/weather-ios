@@ -16,7 +16,9 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setNavigationView()
         setUpTableView()
+        updateWeatherInfo()
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
@@ -26,22 +28,14 @@ class MainViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         ])
         
-        Task {
-//            currentWeather = await weatherService.getCrntWeatherData(cityName: "강남", unit: .imperial)
-            currentWeather = await WeatherService.testGetCrntWeatherData() // 테스트용
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
+        
     }
 }
 
-//MARK: - Views
 extension MainViewController {
     private func setUpTableView() {
         tableView = UITableView(frame: .zero, style: .plain)
-        tableView.contentInset = UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.allowsSelection = true
@@ -49,16 +43,26 @@ extension MainViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(TopWeatherViewCell.self, forCellReuseIdentifier: TopWeatherViewCell.description())
         tableView.register(LabelViewCell.self, forCellReuseIdentifier: LabelViewCell.description())
-        
+    }
+    
+    private func setNavigationView() {
+        navigationItem.setRightBarButton(.init(systemItem: .add), animated: true)
+        navigationItem.title = "로딩중.."
+    }
+    
+    private func updateWeatherInfo() {
+        Task {
+//            currentWeather = await weatherService.getCrntWeatherData(cityName: "강남", unit: UserSettings.weatherUnit ?? .metric)
+            currentWeather = await WeatherService.testGetCrntWeatherData() // 테스트용
+            navigationItem.title = currentWeather?.coord?.localNames?.ko
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
 }
 
-//MARK: - Actions
-extension MainViewController {
-    
-}
-
-//MARK: - UITableView DataSource
+//MARK: - UITableViewDataSource
 extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
@@ -68,14 +72,19 @@ extension MainViewController: UITableViewDataSource {
         switch indexPath.row {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TopWeatherViewCell.description(), for: indexPath) as? TopWeatherViewCell else { return UITableViewCell() }
-//            cell.selectionStyle = .none
-            
-            cell.regionLabel.text = currentWeather?.coord?.localNames?.ko ?? "로딩중..."
             if let currentWeather = currentWeather {
                 cell.weatherImageView.image = UIImage(named: currentWeather.weather?.first?.icon ?? "")
-                cell.tempLabel.text = currentWeather.main?.temp?.description ?? ""
-                cell.descriptLabel.text = currentWeather.weather?.first?.description
+                cell.tempLabel.text = currentWeather.main?.temp?.description
                 
+                if let _ = cell.tempLabel.text {
+                    if UserSettings.weatherUnit == .metric {
+                        cell.tempLabel.text! += " °C"
+                    } else if UserSettings.weatherUnit == .imperial {
+                        cell.tempLabel.text! += " °F"
+                    }
+                }
+                
+                cell.descriptLabel.text = currentWeather.weather?.first?.description
             }
             
             return cell
@@ -109,7 +118,7 @@ extension MainViewController: UITableViewDataSource {
     }
 }
 
-//MARK: - UITableView Delegate
+//MARK: - UITableViewDelegate
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let alloedCell: Set<Int> = [2, 3]
@@ -137,5 +146,6 @@ extension MainViewController: UITableViewDelegate {
 
 @available(iOS 17, *)
 #Preview("", traits: .defaultLayout) {
-    return MainViewController()
+    let naviVC = UINavigationController(rootViewController: MainViewController())
+    return naviVC
 }
