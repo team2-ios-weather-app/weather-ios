@@ -29,7 +29,7 @@ class RegionWeatherVC: UIViewController {
         addSubViews()
         autoLayouts()
         keyBoardHide()
-        
+        loadCityWeather()
     }
     
     private func setupRegionTableView() {
@@ -40,19 +40,39 @@ class RegionWeatherVC: UIViewController {
         regionTableView.register(WeatherCell.self, forCellReuseIdentifier: WeatherCell.identifier)
     }
     
-//    func loadWeatherData() {
-//        guard let savedRegions = UserDefaults.standard.object(forKey: "SavedRegions") as? [String] else { return }
-//        for region in savedRegions {
-//            let key = "WeatherData_\(region)"
-//            if let savedData = UserDefaults.standard.data(forKey: key),
-//               let decodedData = try? JSONDecoder().decode(WeatherDataModel.self, from: savedData) {
-//                weatherDatas.append(decodedData)
-//            } 
-//        }
-//    }
+    private func setupRefreshControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshWeatherData(_:)), for: .valueChanged)
+        regionTableView.refreshControl = refreshControl
+    }
+
+    @objc private func refreshWeatherData(_ sender: UIRefreshControl) {
+        loadCityWeather()
+        sender.endRefreshing()
+    }
 }
 
-// MARK: -UITableViewDataSource,UITableViewDelegate
+// MARK: - 데이터 관리
+extension RegionWeatherVC {
+    func saveCityName(_ cityName: String) {
+        var searchedCity = UserDefaults.standard.array(forKey: "searchedCity") as? [String] ?? []
+        if !searchedCity.contains(cityName) {
+            searchedCity.append(cityName)
+            UserDefaults.standard.set(searchedCity, forKey: "searchedCity")
+        }
+    }
+    
+    func loadCityWeather() {
+        guard let searchedCity = UserDefaults.standard.array(forKey: "searchedCity") as? [String] else { return }
+        for cityName in searchedCity {
+            Task {
+                await fetchAndDisplayWeather(for: cityName)
+            }
+        }
+    }
+}
+
+// MARK: - UITableViewDataSource,UITableViewDelegate
 extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return weatherDatas.count
@@ -77,14 +97,6 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-// MARK: -UISearchResultsUpdating
-extension RegionWeatherVC: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        //검색 결과를 업데이트하는 메서드를 정의
-        
-    }
-}
-
 // MARK: - UISearchBarDelegate
 extension RegionWeatherVC: UISearchBarDelegate {
     // 도시의 날씨 정보를 비동기적으로 가져오고 화면에 표시하는 작업
@@ -100,6 +112,7 @@ extension RegionWeatherVC: UISearchBarDelegate {
         let weatherData = await WeatherService().getCrntWeatherData(cityName: cityName)
         DispatchQueue.main.async {
             self.updateTableView(with: weatherData)
+            self.saveCityName(cityName)
         }
         //print("\(String(describing: weatherData))")
     }
