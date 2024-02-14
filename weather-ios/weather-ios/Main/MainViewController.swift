@@ -27,8 +27,8 @@ class MainViewController: UIViewController {
         ])
         
         Task {
-            
-            currentWeather = WeatherService.testGetCrntWeatherData() // 테스트용
+//            currentWeather = await weatherService.getCrntWeatherData(cityName: "강남")
+            currentWeather = await WeatherService.testGetCrntWeatherData() // 테스트용
 
             
             DispatchQueue.main.async {
@@ -70,9 +70,9 @@ extension MainViewController: UITableViewDataSource {
         case 0:
             print(currentWeather?.main?.temp?.description ?? " dasdsa")
             guard let cell = tableView.dequeueReusableCell(withIdentifier: TopWeatherViewCell.description(), for: indexPath) as? TopWeatherViewCell else { return UITableViewCell() }
-            cell.regionLabel.text = currentWeather?.coord?.localNames?.ko ?? "로딩중.."
+            cell.regionLabel.text = currentWeather?.coord?.localNames?.ko ?? "로딩중..."
             cell.weatherImageView.image = UIImage(named: currentWeather?.weather?.first?.icon ?? "")
-            cell.tempLabel.text = currentWeather?.main?.temp?.description ?? "로딩중.."
+            cell.tempLabel.text = currentWeather?.main?.temp?.description ?? ""
             cell.descriptLabel.text = currentWeather?.weather?.first?.description
             return cell
         case 1:

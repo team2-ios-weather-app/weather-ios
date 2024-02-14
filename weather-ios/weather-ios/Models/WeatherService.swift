@@ -54,7 +54,14 @@ extension WeatherService {
 
 //MARK: - Helpers
 extension WeatherService {
-    static func testGetCrntWeatherData() -> CrntWeatherData { // 사용 예시: WeatherService.testGetCrntWeatherData()
+    static func testGetCrntWeatherData() async -> CrntWeatherData? { // 사용 예시: WeatherService.testGetCrntWeatherData()
+        do {
+            try await Task.sleep(nanoseconds: 700000000)
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        
         return CrntWeatherData(coord: .init(lat: 35.1811, lon: 129.0928, localNames: .init(en: nil, ko: "연산동")),
                                weather: [.init(id: 803,
                                                main: "Clouds",
