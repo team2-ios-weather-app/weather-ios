@@ -22,7 +22,7 @@ class WeatherCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 30, weight: .heavy)
         label.textColor = UIColor.white
-        label.shadowColor = UIColor.black // 텍스트 그림자
+        label.shadowColor = UIColor.darkGray // 텍스트 그림자
         label.shadowOffset = CGSize(width: 2, height: 2)
         return label
     }()
@@ -30,31 +30,23 @@ class WeatherCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 35)
         label.textColor = UIColor.white
-        label.shadowColor = UIColor.black
-        label.shadowOffset = CGSize(width: 2, height: 2)
+        
         return label
     }()
     lazy var tempMinMax: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        label.textColor = UIColor.white.withAlphaComponent(0.85)
-        label.shadowColor = UIColor.black
-        label.shadowOffset = CGSize(width: 1, height: 1)
+        label.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        label.textColor = UIColor.white
+        
         return label
     }()
     lazy var weather: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 19, weight: .medium)
         label.textColor = UIColor.white
-        label.shadowColor = UIColor.black
-        label.shadowOffset = CGSize(width: 1, height: 1)
+        label.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
         label.numberOfLines = 2 // Keep as is for multiline text
-        return label
-    }()
-    lazy var time: UILabel = {
-        var label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = UIColor.systemBlue
+        label.textAlignment = .center
         return label
     }()
     lazy var backgroundImage: UIImageView = {
@@ -89,7 +81,7 @@ extension WeatherCell {
         cityName.text = weatherData.name
         temperature.text = "\(Int(weatherData.main?.temp ?? 0)) °C"
         weather.text = weatherData.weather?.first?.description ?? "날씨에 대한 정보를 가져올 수 없습니다."
-        tempMinMax.text = "최고 \(Int(weatherData.main?.tempMax ?? 0)) / 촤저 \(Int(weatherData.main?.tempMin ?? 0))"
+        tempMinMax.text = "최고 \(Int(weatherData.main?.tempMax ?? 0))°C / 촤저 \(Int(weatherData.main?.tempMin ?? 0))°C"
         updateBackground(for: weatherData.weather?.first?.description ?? "")
         
         contentView.backgroundColor = UIColor.clear
@@ -116,7 +108,7 @@ extension WeatherCell {
             backgroundImage.image = UIImage(named: "clear")
             break
         }
-        print("\(weather)")
+        print("날씨 정보: \(weather)")
     }
     
     
@@ -132,7 +124,7 @@ extension WeatherCell {
         contentView.addSubview(temperature)
         contentView.addSubview(weather)
         contentView.addSubview(tempMinMax)
-        contentView.addSubview(time)
+        
         
         
         cellView.snp.makeConstraints { make in
@@ -155,18 +147,19 @@ extension WeatherCell {
         }
         
         weather.snp.makeConstraints { make in
-            make.top.equalTo(cityName.snp.bottom).offset(10)
+            make.top.equalTo(cityName.snp.bottom).offset(5)
             make.left.equalTo(cityName.snp.left)
+            make.width.equalTo(100)
         }
         
         temperature.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-30)
+            make.right.equalToSuperview().offset(-10)
             make.top.equalToSuperview().offset(25)
             make.width.equalTo(120)
         }
         
         tempMinMax.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-20)
+            make.right.equalToSuperview().offset(-30)
             make.top.equalTo(temperature.snp.bottom).offset(10)
             
         }

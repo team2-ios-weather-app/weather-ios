@@ -26,7 +26,6 @@ class RegionWeatherVC: UIViewController {
     }()
     
     var weatherDatas: [CrntWeatherData] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,7 +61,11 @@ class RegionWeatherVC: UIViewController {
     private func loadRegions() {
         UserSettings.shared.registeredRegions.forEach { cityName in
             Task {
-                await fetchAndDisplayWeather(for: cityName)
+                let weatherData = await WeatherService().getCrntWeatherData(regionName: cityName, unit: .metric)
+                print(weatherData?.coord?.localNames?.ko ?? "")
+                DispatchQueue.main.async {
+                    self.updateTableView(with: weatherData)
+                }
             }
         }
     }
@@ -90,17 +93,14 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
                 UserSettings.shared.removeRegion(cityName)
             }
         }
-        
     }
-    // 뷰 전환(메인화면으로 전환) 
+    // 뷰 전환(메인화면으로 전환)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cityName = weatherDatas[indexPath.row].name else { return }
         
         UserSettings.shared.selectedRegion
         print("선택한 지역: \(cityName)")
     }
-    
-    
     
     // 셀 높이
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -112,30 +112,35 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
 extension RegionWeatherVC: UISearchBarDelegate {
     // 도시의 날씨 정보를 비동기적으로 가져오고 화면에 표시하는 작업
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let cityName = searchBar.text else { return }
+        guard let cityName = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines), !cityName.isEmpty else { return }
         Task {
-            await fetchAndDisplayWeather(for: cityName)
+            let weatherData = await WeatherService().getCrntWeatherData(regionName: cityName, unit: .metric)
+            //print("지역:  \(weatherData?.coord?.localNames?.ko ?? "")")
+            DispatchQueue.main.async {
+                UserSettings.shared.registeredRegions.append(weatherData?.coord?.localNames?.en ?? "")
+                UserSettings.shared.save()
+                self.updateTableView(with: weatherData)
+                print("저장된 지역: \(UserSettings.shared.registeredRegions)")
+            }
         }
         print("입력한 값: \(cityName)")
     }
     
-    func fetchAndDisplayWeather(for cityName: String) async {
-        let weatherData = await WeatherService().getCrntWeatherData(regionName: cityName, unit: .metric)
-        DispatchQueue.main.async {
-            self.updateTableView(with: weatherData)
-        }
-    }
-    
     func updateTableView(with weatherData: CrntWeatherData?) {
         guard let weatherData = weatherData,
-                  !weatherDatas.contains(where: { $0.name == weatherData.name }) else { return }
+              !weatherDatas.contains(where: { $0.name == weatherData.name }) else { return }
         weatherDatas.append(weatherData)
         regionTableView.reloadData()
-        UserSettings.shared.registeredRegions.append(weatherData.name ?? "")
-        
+        printCurrentWeatherData()
         print("값 \(weatherData.name ?? "")")
+        
     }
     
+    private func printCurrentWeatherData() {
+        for data in weatherDatas {
+            print("지역: \(data.name ?? ""), 온도: \(data.main?.temp)")
+        }
+    }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         DispatchQueue.main.async {
             Task {
@@ -163,7 +168,8 @@ extension RegionWeatherVC {
     private func autoLayouts() {
         regionTitleButton.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            make.left.right.equalTo(view)
+            make.left.equalTo(view).offset(10)
+            make.width.equalTo(180)
         }
         regionSearchBar.snp.makeConstraints { make in
             make.top.equalTo(regionTitleButton.snp.top).offset(80)

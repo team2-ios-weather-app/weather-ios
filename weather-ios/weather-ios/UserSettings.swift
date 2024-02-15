@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 class UserSettings: Codable {
     static var shared = UserSettings.load()
 
@@ -39,12 +40,13 @@ extension UserSettings {
         if let data = try? JSONEncoder().encode(self) {
             UserDefaults.standard.set(data, forKey: "\(UserSettings.self)")
         }
-    }
+    } //대구 대전 부산 대천 뉴욕
     
-    func removeRegion(_ regionName: String) { 
+    func removeRegion(_ regionName: String) {
         if let index = registeredRegions.firstIndex(of: regionName) {
             registeredRegions.remove(at: index)
             print("삭제된 지역: \(regionName)  /  현재 등록된 지역들: \(registeredRegions)")
+            save()
         } else {
             print("\(regionName) 지역을 찾을 수 없습니다.")
         }
