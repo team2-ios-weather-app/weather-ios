@@ -11,7 +11,7 @@ class LabelViewCell: UITableViewCell {
 
     var mainTitle: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
         label.textAlignment = .center
         label.textColor = .white
         label.numberOfLines = 0

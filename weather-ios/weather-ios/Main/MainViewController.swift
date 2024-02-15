@@ -72,13 +72,13 @@ extension MainViewController {
             
             DispatchQueue.main.async {
                 self.navigationItem.title = self.currentWeather?.coord?.localNames?.ko
-                self.navigationController?.navigationBar.tintColor = .white
+                self.navigationController?.navigationBar.tintColor = .green
                 self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25),.foregroundColor: UIColor.white]
                 self.navigationItem.rightBarButtonItem?.title = UserSettings.shared.weatherUnit == .metric ? " °F" : " °C"
+                
                 self.tableView.reloadData()
             }
         }
-        
     }
     private func setUpRefreshControl() {
         // Configure refresh control
@@ -117,16 +117,18 @@ extension MainViewController: UITableViewDataSource {
             cell.selectionStyle = .none
             
             // 날씨 디테일 뷰에 온도, 습도, 풍속 정보 추가
-                    if let currentWeather = currentWeather {
-                        let weatherDetailText = """
-                        최고온도: \(currentWeather.main?.tempMax ?? 0)°C
-                        최저온도: \(currentWeather.main?.tempMin ?? 0)°C
-                        습도: \(currentWeather.main?.humidity ?? 0)%
-                        """
-                        cell.mainTitle.text = weatherDetailText
-                    } else {
-                        cell.mainTitle.text = "날씨 정보가 없습니다."
-                    }
+            if let currentWeather = currentWeather {
+                let tempUnit = UserSettings.shared.weatherUnit == .metric ? "°C" : "°F" // 온도 단위 설정
+                let weatherDetailText = """
+                최고온도: \(currentWeather.main?.tempMax ?? 0)\(tempUnit)
+                최저온도: \(currentWeather.main?.tempMin ?? 0)\(tempUnit)
+                습도: \(currentWeather.main?.humidity ?? 0)%
+                """
+                cell.mainTitle.text = weatherDetailText
+
+            } else {
+                cell.mainTitle.text = "날씨 정보가 없습니다."
+            }
                     
             return cell
         case 2:
