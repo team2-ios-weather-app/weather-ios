@@ -11,12 +11,14 @@ class MainViewController: UIViewController {
     var weatherService = WeatherService()
     var currentWeather: CrntWeatherData?
     private var tableView: UITableView!
+    private var refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setNavigationView()
         setUpTableView()
+        setUpRefreshControl()
         updateWeatherInfo()
         view.addSubview(tableView)
         
@@ -50,25 +52,36 @@ extension MainViewController {
             }))
             return item
         }()
-            
+        
         navigationItem.setRightBarButton(unitToggleItem, animated: true)
         navigationItem.title = "로딩중.."
     }
     
     private func updateWeatherInfo() {
         Task {
-//            currentWeather = await weatherService.getCrntWeatherData(regionName: UserSettings.shared.selectedRegion, unit: UserSettings.shared.weatherUnit) // 서비스용
-            currentWeather = await WeatherService.testGetCrntWeatherData() // 테스트용
+            currentWeather = await weatherService.getCrntWeatherData(regionName: UserSettings.shared.selectedRegion, unit: UserSettings.shared.weatherUnit) // 서비스용
+            //            currentWeather = await WeatherService.testGetCrntWeatherData() // 테스트용
             
             DispatchQueue.main.async {
                 self.navigationItem.title = self.currentWeather?.coord?.localNames?.ko
-                self.navigationItem.rightBarButtonItem?.title = UserSettings.shared.weatherUnit == .metric ? " °C" : " °F"
+                self.navigationItem.rightBarButtonItem?.title = UserSettings.shared.weatherUnit == .metric ? " °F" : " °C"
                 self.tableView.reloadData()
             }
         }
     }
+    private func setUpRefreshControl() {
+        // Configure refresh control
+        refreshControl.addTarget(self, action: #selector(refreshWeatherData(_:)), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+    @objc private func refreshWeatherData(_ sender: Any) {
+        // Perform data refresh
+        updateWeatherInfo()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            self.refreshControl.endRefreshing()
+        }
+    }
 }
-
 //MARK: - UITableViewDataSource
 extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -91,18 +104,19 @@ extension MainViewController: UITableViewDataSource {
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
             cell.selectionStyle = .none
-            cell.mainTitle.text =
-                                """
-                                                                                                                                                                                                                                                                                                                                  -------------------------
-
-                                                                                                                                                여기다가
-
-                                                                                                                                        날씨 디테일 뷰 추가 하면 될듯요.
-                                                                                                                                                                                                                                                                                                -------------------------
-
-
-
-"""
+            
+            // 날씨 디테일 뷰에 온도, 습도, 풍속 정보 추가
+                    if let currentWeather = currentWeather {
+                        let weatherDetailText = """
+                        최고온도: \(currentWeather.main?.tempMax ?? 0)°C
+                        최저온도: \(currentWeather.main?.tempMin ?? 0)°C
+                        습도: \(currentWeather.main?.humidity ?? 0)%
+                        """
+                        cell.mainTitle.text = weatherDetailText
+                    } else {
+                        cell.mainTitle.text = "날씨 정보가 없습니다."
+                    }
+                    
             return cell
         case 2:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
