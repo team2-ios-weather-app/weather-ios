@@ -131,7 +131,7 @@ class MapViewController: UIViewController {
         for coordinate in cityCoordinates {
             let coordinate = Coordinate(lat: coordinate.0, lon: coordinate.1)
             Task {
-                let crntWeather = await weatherService.getCrntWeatherData(coordinate: coordinate)
+                let crntWeather = await weatherService.getCrntWeatherData(coordinate: coordinate, unit: .metric)
                 let markerImage = UIImage(named: crntWeather?.weather?.first?.icon ?? "")
                 let overlayImage = NMFOverlayImage(image: markerImage!) // UIImage를 NMFOverlayImage로 변환
                 let marker = NMFMarker()
