@@ -40,6 +40,16 @@ extension UserSettings {
             UserDefaults.standard.set(data, forKey: "\(UserSettings.self)")
         }
     }
+    
+    func removeRegion(_ regionName: String) {
+        if let index = registeredRegions.firstIndex(of: regionName) {
+            registeredRegions.remove(at: index)
+            save()
+            print("삭제된 지역: \(regionName)  /  현재 등록된 지역들: \(registeredRegions)")
+        } else {
+            print("\(regionName) 지역을 찾을 수 없습니다.")
+        }
+    }
 }
 
 extension UserSettings {
