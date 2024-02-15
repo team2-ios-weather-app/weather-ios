@@ -53,6 +53,63 @@ class MainViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         ])
     }
+}
+
+extension MainViewController {
+    private func setUpTableView() {
+        tableView = UITableView(frame: .zero, style: .plain)
+        tableView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
+        tableView.dataSource = self
+        //tableView.delegate = self
+        tableView.allowsSelection = true
+        tableView.separatorStyle = .none
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(TopWeatherViewCell.self, forCellReuseIdentifier: TopWeatherViewCell.description())
+        tableView.register(LabelViewCell.self, forCellReuseIdentifier: LabelViewCell.description())
+        tableView.backgroundColor = .clear
+    }
+    
+    private func setNavigationView() {
+        let unitToggleItem = {
+            let item = UIBarButtonItem(title: "", primaryAction: .init(handler: { _ in
+                UserSettings.shared.weatherUnitToggle()
+                self.updateWeatherInfo()
+            }))
+            return item
+        }()
+        
+        navigationItem.setRightBarButton(unitToggleItem, animated: true)
+        navigationItem.title = "로딩중.."
+    }
+    
+    private func updateWeatherInfo() {
+        Task {
+            currentWeather = await weatherService.getCrntWeatherData(regionName: UserSettings.shared.selectedRegion, unit: UserSettings.shared.weatherUnit) // 서비스용
+            //            currentWeather = await WeatherService.testGetCrntWeatherData() // 테스트용
+            
+            DispatchQueue.main.async {
+                self.navigationItem.title = self.currentWeather?.coord?.localNames?.ko
+                self.navigationController?.navigationBar.tintColor = .green
+                self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25),.foregroundColor: UIColor.white]
+                self.navigationItem.rightBarButtonItem?.title = UserSettings.shared.weatherUnit == .metric ? " °C" : " °F"
+                
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    private func setUpRefreshControl() {
+        // Configure refresh control
+        refreshControl.addTarget(self, action: #selector(refreshWeatherData(_:)), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+    @objc private func refreshWeatherData(_ sender: Any) {
+        // Perform data refresh
+        updateWeatherInfo()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            self.refreshControl.endRefreshing()
+        }
+    }
     
     private func setupButtons() {
         mapWeatherButton.addTarget(self, action: #selector(showMapWeather), for: .touchUpInside)
@@ -93,63 +150,10 @@ class MainViewController: UIViewController {
         // 추가한 지역 목록 보기 기능 구현
         let regionVC = RegionWeatherVC()
         regionVC.modalPresentationStyle = .automatic
+        regionVC.tappedCell = {
+            self.updateWeatherInfo()
+        }
         present(regionVC, animated: true)
-    }
-}
-
-extension MainViewController {
-    private func setUpTableView() {
-        tableView = UITableView(frame: .zero, style: .plain)
-        tableView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
-        tableView.dataSource = self
-        //tableView.delegate = self
-        tableView.allowsSelection = true
-        tableView.separatorStyle = .none
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(TopWeatherViewCell.self, forCellReuseIdentifier: TopWeatherViewCell.description())
-        tableView.register(LabelViewCell.self, forCellReuseIdentifier: LabelViewCell.description())
-        tableView.backgroundColor = .clear
-    }
-    
-    private func setNavigationView() {
-        let unitToggleItem = {
-            let item = UIBarButtonItem(title: "", primaryAction: .init(handler: { _ in
-                UserSettings.shared.weatherUnitToggle()
-                self.updateWeatherInfo()
-            }))
-            return item
-        }()
-        
-        navigationItem.setRightBarButton(unitToggleItem, animated: true)
-        navigationItem.title = "로딩중.."
-    }
-    
-    private func updateWeatherInfo() {
-        Task {
-            currentWeather = await weatherService.getCrntWeatherData(regionName: UserSettings.shared.selectedRegion, unit: UserSettings.shared.weatherUnit) // 서비스용
-            //            currentWeather = await WeatherService.testGetCrntWeatherData() // 테스트용
-            
-            DispatchQueue.main.async {
-                self.navigationItem.title = self.currentWeather?.coord?.localNames?.ko
-                self.navigationController?.navigationBar.tintColor = .green
-                self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25),.foregroundColor: UIColor.white]
-                self.navigationItem.rightBarButtonItem?.title = UserSettings.shared.weatherUnit == .metric ? " °F" : " °C"
-                
-                self.tableView.reloadData()
-            }
-        }
-    }
-    private func setUpRefreshControl() {
-        // Configure refresh control
-        refreshControl.addTarget(self, action: #selector(refreshWeatherData(_:)), for: .valueChanged)
-        tableView.refreshControl = refreshControl
-    }
-    @objc private func refreshWeatherData(_ sender: Any) {
-        // Perform data refresh
-        updateWeatherInfo()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-            self.refreshControl.endRefreshing()
-        }
     }
 }
 //MARK: - UITableViewDataSource

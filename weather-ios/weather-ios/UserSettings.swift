@@ -40,7 +40,7 @@ extension UserSettings {
         if let data = try? JSONEncoder().encode(self) {
             UserDefaults.standard.set(data, forKey: "\(UserSettings.self)")
         }
-    } //대구 대전 부산 대천 뉴욕
+    }
     
     func removeRegion(_ regionName: String) {
         if let index = registeredRegions.firstIndex(of: regionName) {

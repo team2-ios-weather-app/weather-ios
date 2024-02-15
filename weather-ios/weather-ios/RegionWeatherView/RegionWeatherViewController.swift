@@ -3,6 +3,7 @@ import SnapKit
 
 
 class RegionWeatherVC: UIViewController {
+    var tappedCell: (()->())?
     private lazy var regionTableView = UITableView()
     private var refreshWeather: UIRefreshControl!
     private lazy var weatherService = WeatherService()
@@ -97,9 +98,9 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     // 뷰 전환(메인화면으로 전환)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cityName = weatherDatas[indexPath.row].name else { return }
-        
-        UserSettings.shared.selectedRegion
-        print("선택한 지역: \(cityName)")
+        UserSettings.shared.selectedRegion = cityName
+        tappedCell?()
+        dismiss(animated: true)
     }
     
     // 셀 높이
