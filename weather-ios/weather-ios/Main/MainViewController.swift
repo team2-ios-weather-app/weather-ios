@@ -12,29 +12,88 @@ class MainViewController: UIViewController {
     var currentWeather: CrntWeatherData?
     private var tableView: UITableView!
     private var refreshControl = UIRefreshControl()
+    private var mapWeatherButton: UIButton = {
+        let button = UIButton()
+        let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .medium, scale: .large)
+        let buttonImage = UIImage(systemName: "map", withConfiguration: config)
+        button.setImage(buttonImage, for: .normal)
+        button.tintColor = .white
+        return button
+    }()
+    private var regionListButton: UIButton = {
+        let button = UIButton()
+        let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .medium, scale: .large)
+        let buttonImage = UIImage(systemName: "list.clipboard.fill", withConfiguration: config)
+        button.setImage(buttonImage, for: .normal)
+        button.tintColor = .white
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-                let backgroundImage = UIImage(named: "few clouds")
-                let backgroundImageView = UIImageView(image: backgroundImage)
-                backgroundImageView.contentMode = .scaleAspectFill
-                backgroundImageView.frame = view.bounds
-                view.addSubview(backgroundImageView)
-                view.sendSubviewToBack(backgroundImageView)
+        let backgroundImage = UIImage(named: "few clouds")
+        let backgroundImageView = UIImageView(image: backgroundImage)
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.frame = view.bounds
+        view.addSubview(backgroundImageView)
+        view.sendSubviewToBack(backgroundImageView)
         
         setNavigationView()
         setUpTableView()
         setUpRefreshControl()
         updateWeatherInfo()
+        setupButtons()
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -200),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         ])
+    }
+    
+    private func setupButtons() {
+        mapWeatherButton.addTarget(self, action: #selector(showMapWeather), for: .touchUpInside)
+        regionListButton.addTarget(self, action: #selector(showRegionList), for: .touchUpInside)
+        
+        // 버튼 뷰에 추가
+        view.addSubview(mapWeatherButton)
+        view.addSubview(regionListButton)
+        
+        // 오토레이아웃 제약조건 설정
+        mapWeatherButton.translatesAutoresizingMaskIntoConstraints = false
+        regionListButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            mapWeatherButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 40),
+            mapWeatherButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -100),
+            mapWeatherButton.widthAnchor.constraint(equalToConstant: 100),
+            mapWeatherButton.heightAnchor.constraint(equalToConstant: 100),
+        
+            regionListButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -40),
+            regionListButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -100),
+            regionListButton.widthAnchor.constraint(equalToConstant: 100),
+            regionListButton.heightAnchor.constraint(equalToConstant: 100),
+        ])
+        
+        mapWeatherButton.layer.cornerRadius = 50  // 버튼의 둥근 모서리 반경 설정
+        regionListButton.layer.cornerRadius = 50
+    }
+    
+    @objc private func showMapWeather() {
+        // 한국 지도 날씨 보기 기능 구현
+        let mapVC = MapViewController()
+        mapVC.modalPresentationStyle = .automatic
+        present(mapVC, animated: true)
+    }
+    
+    @objc private func showRegionList() {
+        // 추가한 지역 목록 보기 기능 구현
+        let regionVC = RegionWeatherVC()
+        regionVC.modalPresentationStyle = .automatic
+        present(regionVC, animated: true)
     }
 }
 
@@ -43,7 +102,7 @@ extension MainViewController {
         tableView = UITableView(frame: .zero, style: .plain)
         tableView.contentInset = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
         tableView.dataSource = self
-        tableView.delegate = self
+        //tableView.delegate = self
         tableView.allowsSelection = true
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -96,7 +155,7 @@ extension MainViewController {
 //MARK: - UITableViewDataSource
 extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -131,44 +190,8 @@ extension MainViewController: UITableViewDataSource {
             }
                     
             return cell
-        case 2:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
-            cell.selectionStyle = .gray
-            cell.mainTitle.text = "한국 지도 날씨 보기"
-            return cell
-        case 3:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: LabelViewCell.description(), for: indexPath) as? LabelViewCell else { return UITableViewCell() }
-            cell.selectionStyle = .gray
-            cell.mainTitle.text = "추가한 지역 목록 보기"
-            return cell
         default:
             return UITableViewCell()
-        }
-    }
-}
-
-//MARK: - UITableViewDelegate
-extension MainViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        let allowedCell: Set<Int> = [2, 3]
-        if allowedCell.contains(indexPath.row) {
-            return indexPath
-        } else {
-            return nil
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        switch indexPath.row {
-        case 2:
-            let mapVC = MapViewController()
-            present(mapVC, animated: true)
-        case 3:
-            let regionVC = RegionWeatherVC()
-            present(regionVC, animated: true)
-        default:
-            return
         }
     }
 }
