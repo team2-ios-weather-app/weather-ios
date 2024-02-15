@@ -9,8 +9,11 @@ class RegionWeatherVC: UIViewController {
     private lazy var regionTitleButton: UIButton = {
         let button = UIButton()
         button.setTitle("지역별 날씨", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .semibold)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.shadowColor = UIColor.black
+        button.titleLabel?.shadowOffset = CGSize(width: 2, height: 2)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 32, weight: .heavy)
+        button.backgroundColor = UIColor.clear
         button.layer.cornerRadius = 10
         return button
     }()
@@ -23,15 +26,16 @@ class RegionWeatherVC: UIViewController {
     }()
     
     var weatherDatas: [CrntWeatherData] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        
         setupRegionTableView()
         addSubViews()
         autoLayouts()
         keyBoardHide()
         loadRegions()
+        tableViewBackground()
+        
     }
     
     private func setupRegionTableView() {
@@ -41,11 +45,27 @@ class RegionWeatherVC: UIViewController {
         regionTableView.translatesAutoresizingMaskIntoConstraints = false
         regionTableView.register(WeatherCell.self, forCellReuseIdentifier: WeatherCell.identifier)
     }
+    private func tableViewBackground() {
+        let backgroundImage = UIImage(named: "skyview")
+        let backgroundImageView = UIImageView(image: backgroundImage)
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.frame = self.view.bounds
+        view.insertSubview(backgroundImageView, at: 0)
+        
+        regionTableView.backgroundColor = UIColor.clear.withAlphaComponent(0.2)
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.clear
+        regionTableView.backgroundView = backgroundView
+    }
     
     private func loadRegions() {
         UserSettings.shared.registeredRegions.forEach { cityName in
             Task {
-                await fetchAndDisplayWeather(for: cityName)
+                let weatherData = await WeatherService().getCrntWeatherData(regionName: cityName, unit: .metric)
+                print(weatherData?.coord?.localNames?.ko ?? "")
+                DispatchQueue.main.async {
+                    self.updateTableView(with: weatherData)
+                }
             }
         }
     }
@@ -55,7 +75,7 @@ class RegionWeatherVC: UIViewController {
 extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return weatherDatas.count
-    }// 대구
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WeatherCell.identifier, for: indexPath) as! WeatherCell
@@ -73,17 +93,14 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
                 UserSettings.shared.removeRegion(cityName)
             }
         }
-        
     }
-    // 뷰 전환(메인화면으로 전환) 
+    // 뷰 전환(메인화면으로 전환)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cityName = weatherDatas[indexPath.row].name else { return }
         
         UserSettings.shared.selectedRegion
         print("선택한 지역: \(cityName)")
     }
-    
-    
     
     // 셀 높이
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -95,30 +112,35 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
 extension RegionWeatherVC: UISearchBarDelegate {
     // 도시의 날씨 정보를 비동기적으로 가져오고 화면에 표시하는 작업
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let cityName = searchBar.text else { return }
+        guard let cityName = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines), !cityName.isEmpty else { return }
         Task {
-            await fetchAndDisplayWeather(for: cityName)
+            let weatherData = await WeatherService().getCrntWeatherData(regionName: cityName, unit: .metric)
+            //print("지역:  \(weatherData?.coord?.localNames?.ko ?? "")")
+            DispatchQueue.main.async {
+                UserSettings.shared.registeredRegions.append(weatherData?.coord?.localNames?.en ?? "")
+                UserSettings.shared.save()
+                self.updateTableView(with: weatherData)
+                print("저장된 지역: \(UserSettings.shared.registeredRegions)")
+            }
         }
         print("입력한 값: \(cityName)")
     }
     
-    func fetchAndDisplayWeather(for cityName: String) async {
-        let weatherData = await WeatherService().getCrntWeatherData(regionName: cityName, unit: .metric)
-        DispatchQueue.main.async {
-            self.updateTableView(with: weatherData)
-        }
-    }
-    
     func updateTableView(with weatherData: CrntWeatherData?) {
-        guard let weatherData = weatherData else { return }
+        guard let weatherData = weatherData,
+              !weatherDatas.contains(where: { $0.name == weatherData.name }) else { return }
         weatherDatas.append(weatherData)
         regionTableView.reloadData()
-        UserSettings.shared.registeredRegions.append(weatherData.name ?? "")
-        UserSettings.shared.save()
-        
+        printCurrentWeatherData()
         print("값 \(weatherData.name ?? "")")
+        
     }
     
+    private func printCurrentWeatherData() {
+        for data in weatherDatas {
+            print("지역: \(data.name ?? ""), 온도: \(data.main?.temp)")
+        }
+    }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         DispatchQueue.main.async {
             Task {
@@ -145,8 +167,9 @@ extension RegionWeatherVC {
     
     private func autoLayouts() {
         regionTitleButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
-            make.left.right.equalTo(view)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            make.left.equalTo(view).offset(10)
+            make.width.equalTo(180)
         }
         regionSearchBar.snp.makeConstraints { make in
             make.top.equalTo(regionTitleButton.snp.top).offset(80)
@@ -154,8 +177,8 @@ extension RegionWeatherVC {
         }
         regionTableView.snp.makeConstraints { make in
             make.top.equalTo(regionSearchBar.snp.bottom).offset(30)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
+            make.left.equalToSuperview().offset(10)
+            make.right.equalToSuperview().inset(10)
             make.bottom.equalToSuperview()
         }
     }
