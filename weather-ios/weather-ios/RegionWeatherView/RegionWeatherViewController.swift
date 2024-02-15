@@ -21,7 +21,6 @@ class RegionWeatherVC: UIViewController {
         search.searchBarStyle = .minimal
         return search
     }()
-    var onCitySelected: ((String) -> Void)?
     
     var weatherDatas: [CrntWeatherData] = []
     
@@ -32,6 +31,7 @@ class RegionWeatherVC: UIViewController {
         addSubViews()
         autoLayouts()
         keyBoardHide()
+        loadRegions()
     }
     
     private func setupRegionTableView() {
@@ -42,14 +42,12 @@ class RegionWeatherVC: UIViewController {
         regionTableView.register(WeatherCell.self, forCellReuseIdentifier: WeatherCell.identifier)
     }
     
-    private func setupRefreshControl() {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refreshWeatherData(_:)), for: .valueChanged)
-        regionTableView.refreshControl = refreshControl
-    }
-
-    @objc private func refreshWeatherData(_ sender: UIRefreshControl) {
-        sender.endRefreshing()
+    private func loadRegions() {
+        UserSettings.shared.registeredRegions.forEach { cityName in
+            Task {
+                await fetchAndDisplayWeather(for: cityName)
+            }
+        }
     }
 }
 
@@ -80,7 +78,7 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     // 뷰 전환(메인화면으로 전환) 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cityName = weatherDatas[indexPath.row].name else { return }
-        onCitySelected?(cityName)
+        
         UserSettings.shared.selectedRegion
         print("선택한 지역: \(cityName)")
     }
@@ -109,7 +107,6 @@ extension RegionWeatherVC: UISearchBarDelegate {
         DispatchQueue.main.async {
             self.updateTableView(with: weatherData)
         }
-        //print("\(String(describing: weatherData))")
     }
     
     func updateTableView(with weatherData: CrntWeatherData?) {
@@ -117,6 +114,8 @@ extension RegionWeatherVC: UISearchBarDelegate {
         weatherDatas.append(weatherData)
         regionTableView.reloadData()
         UserSettings.shared.registeredRegions.append(weatherData.name ?? "")
+        UserSettings.shared.save()
+        
         print("값 \(weatherData.name ?? "")")
     }
     
