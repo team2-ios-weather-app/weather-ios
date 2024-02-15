@@ -112,12 +112,15 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
 extension RegionWeatherVC: UISearchBarDelegate {
     // 도시의 날씨 정보를 비동기적으로 가져오고 화면에 표시하는 작업
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let cityName = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines), !cityName.isEmpty else { return }
+        guard let cityName = searchBar.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+                ,!cityName.isEmpty else { return }
         Task {
             let weatherData = await WeatherService().getCrntWeatherData(regionName: cityName, unit: .metric)
-            //print("지역:  \(weatherData?.coord?.localNames?.ko ?? "")")
+            //print("지역:  \(weatherData?.coord?.localNames?.ko ?? "")") 제주
             DispatchQueue.main.async {
-                UserSettings.shared.registeredRegions.append(weatherData?.coord?.localNames?.en ?? "")
+                if !UserSettings.shared.registeredRegions.contains(weatherData?.coord?.localNames?.en ?? "") {
+                    UserSettings.shared.registeredRegions.append(weatherData?.coord?.localNames?.en ?? "")
+                }
                 UserSettings.shared.save()
                 self.updateTableView(with: weatherData)
                 print("저장된 지역: \(UserSettings.shared.registeredRegions)")
