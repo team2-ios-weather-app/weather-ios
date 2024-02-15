@@ -85,7 +85,7 @@ extension WeatherCell {
             backgroundImage.image = UIImage(named: "few clouds")
         case "약간의 구름이 낀 하늘":
             backgroundImage.image = UIImage(named: "few clouds")
-        case "broken clouds":
+        case "보통 비":
             backgroundImage.image = UIImage(named: "few clouds")
         case "실 비":
             backgroundImage.image = UIImage(named: "few clouds")
@@ -97,21 +97,15 @@ extension WeatherCell {
             backgroundImage.image = UIImage(named: "few clouds")
         case "안개":
             backgroundImage.image = UIImage(named: "few clouds")
+        case "온흐림":
+            backgroundImage.image = UIImage(named: "few clouds")
         default:
             break
         }
         print("\(weather)")
-        //animate()
     }
     
-    private func animate() {
-        // backgroundImage frame 재설정
-        backgroundImage.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
-        // 애니메이션 적용
-//        UIView.animate(withDuration: 100, delay: 0, options: [.repeat, .], animations: {
-//            self.backgroundImage.frame = CGRect(x: self.frame.width, y: 0, width: self.frame.width, height: self.frame.height)
-//        }, completion: nil)
-    }
+    
 }
 
 extension WeatherCell {
