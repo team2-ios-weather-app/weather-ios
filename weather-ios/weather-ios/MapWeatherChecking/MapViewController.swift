@@ -10,7 +10,7 @@ import NMapsMap
 
 class MapViewController: UIViewController {
     // 각 시의 위치를 위한 위도와 경도 값
-    let cityCoordinates: [(Double, Double)] = [
+    private let cityCoordinates: [(Double, Double)] = [
         (37.4563, 126.7052), // 인천
         (37.5665, 126.9780), // 서울
         (37.8859, 127.7347), // 춘천
@@ -38,13 +38,15 @@ class MapViewController: UIViewController {
         // 필요에 따라 다른 도시들의 좌표도 추가
     ]
     var weatherService = WeatherService()
+    private var markers: [NMFMarker] = []
+    private var statusForMap: Int = 0 // flag 기능을 위한 변수. 0: default, 1: 저장된 지역 날씨 보기, 2: 전체 지역 날씨 보기
     
     private let myMapButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("📍 저장된 지역 날씨 보기", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
-        
+        button.addTarget(target, action: #selector(myMapShow), for: .touchUpInside)
         button.backgroundColor = .lightGray
         button.layer.cornerRadius = 10
         return button
@@ -55,7 +57,7 @@ class MapViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("🌍 전체 지역 날씨 보기", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
-        button.addTarget(target, action: #selector(addMarkers), for: .touchUpInside)
+        button.addTarget(target, action: #selector(totalMapShow), for: .touchUpInside)
         button.backgroundColor = .lightGray
         button.layer.cornerRadius = 10
         return button
@@ -65,7 +67,7 @@ class MapViewController: UIViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named: "Update"), for: .normal)
-        button.addTarget(target, action: #selector(addMarkers), for: .touchUpInside)
+        button.addTarget(target, action: #selector(updateMapShow), for: .touchUpInside)
         return button
     }()
     
@@ -95,11 +97,11 @@ class MapViewController: UIViewController {
     
     private func setupUI() {
         NSLayoutConstraint.activate([
-            myMapButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            myMapButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
             myMapButton.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor, constant: 10),
             myMapButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor, constant: -5),
             
-            totalMapButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            totalMapButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20),
             totalMapButton.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.centerXAnchor, constant: 5),
             totalMapButton.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor, constant: -10),
             
@@ -127,7 +129,35 @@ class MapViewController: UIViewController {
     }
     
     @objc
-    private func addMarkers() {
+    private func myMapShow() {
+        clearMap()
+        statusForMap = 1
+        
+        print(UserSettings.shared.registeredRegions)
+        for cityName in UserSettings.shared.registeredRegions {
+            Task {
+                let crntWeather = await weatherService.getCrntWeatherData(regionName: cityName, unit: .metric)
+                let markerImage = UIImage(named: crntWeather?.weather?.first?.icon ?? "")
+                let overlayImage = NMFOverlayImage(image: markerImage!) // UIImage를 NMFOverlayImage로 변환
+                let marker = NMFMarker()
+                let coordinate = await weatherService.getCoordinateFor(cityName)
+                
+                marker.position = NMGLatLng(lat: coordinate!.lat, lng: coordinate!.lon)
+                marker.iconImage = overlayImage
+                marker.width = 30
+                marker.height = 30
+                marker.mapView = self.naverMapView
+                
+                self.markers.append(marker)
+            }
+        }
+    }
+    
+    @objc
+    private func totalMapShow() {
+        clearMap()
+        statusForMap = 2
+        
         for coordinate in cityCoordinates {
             let coordinate = Coordinate(lat: coordinate.0, lon: coordinate.1)
             Task {
@@ -140,8 +170,27 @@ class MapViewController: UIViewController {
                 marker.width = 30
                 marker.height = 30
                 marker.mapView = self.naverMapView
+                
+                self.markers.append(marker)
             }
         }
+    }
+    
+    @objc
+    private func updateMapShow() {
+        switch statusForMap {
+        case 0: break // 기본 상태 : 지도에 아무 마커도 띄우지 않은 상태
+        case 1: myMapShow()
+        case 2: totalMapShow()
+        default: break
+        }
+    }
+    
+    private func clearMap() {
+        for marker in markers {
+            marker.mapView = nil
+        }
+        markers.removeAll()
     }
     
 }
