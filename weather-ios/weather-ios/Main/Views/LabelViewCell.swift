@@ -13,6 +13,7 @@ class LabelViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         label.textAlignment = .center
+        label.textColor = .white
         label.numberOfLines = 0
         return label
     }()
@@ -29,6 +30,8 @@ class LabelViewCell: UITableViewCell {
             mainTitle
         ])
         
+        contentView.backgroundColor = .clear
+        backgroundColor = .clear
         contentView.addSubview(container)
         NSLayoutConstraint.activate([
             container.topAnchor.constraint(equalTo: contentView.topAnchor),

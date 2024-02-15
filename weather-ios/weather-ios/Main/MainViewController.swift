@@ -16,6 +16,13 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+                let backgroundImage = UIImage(named: "few clouds")
+                let backgroundImageView = UIImageView(image: backgroundImage)
+                backgroundImageView.contentMode = .scaleAspectFill
+                backgroundImageView.frame = view.bounds
+                view.addSubview(backgroundImageView)
+                view.sendSubviewToBack(backgroundImageView)
+        
         setNavigationView()
         setUpTableView()
         setUpRefreshControl()
@@ -42,6 +49,7 @@ extension MainViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(TopWeatherViewCell.self, forCellReuseIdentifier: TopWeatherViewCell.description())
         tableView.register(LabelViewCell.self, forCellReuseIdentifier: LabelViewCell.description())
+        tableView.backgroundColor = .clear
     }
     
     private func setNavigationView() {
@@ -64,10 +72,13 @@ extension MainViewController {
             
             DispatchQueue.main.async {
                 self.navigationItem.title = self.currentWeather?.coord?.localNames?.ko
+                self.navigationController?.navigationBar.tintColor = .white
+                self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25),.foregroundColor: UIColor.white]
                 self.navigationItem.rightBarButtonItem?.title = UserSettings.shared.weatherUnit == .metric ? " °F" : " °C"
                 self.tableView.reloadData()
             }
         }
+        
     }
     private func setUpRefreshControl() {
         // Configure refresh control

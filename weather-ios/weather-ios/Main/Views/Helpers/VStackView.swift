@@ -18,6 +18,7 @@ class VStackView: UIStackView {
         self.translatesAutoresizingMaskIntoConstraints = false
         
         for v in views {
+            v.backgroundColor = .clear
             addArrangedSubview(v)
         }
     }
