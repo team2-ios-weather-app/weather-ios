@@ -51,9 +51,7 @@ extension UserSettings {
             print("\(regionName) 지역을 찾을 수 없습니다.")
         }
     }
-}
-
-extension UserSettings {
+    
     func weatherUnitToggle() {
         weatherUnit = weatherUnit == .metric ? .imperial : .metric
     }

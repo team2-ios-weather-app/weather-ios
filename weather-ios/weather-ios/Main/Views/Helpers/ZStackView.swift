@@ -7,52 +7,6 @@
 
 import UIKit
 
-//class ZStackView: UIView {
-//    
-//    init() {
-//        super.init(frame: .zero)
-//        self.translatesAutoresizingMaskIntoConstraints = false
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//    
-//    func addArrangedSubview(_ subView: UIView) {
-//        addSubview(subView)
-//        
-//        subView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            subView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-//            subView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-//        ])
-//    }
-//}
-
-//class ZStackView: UIStackView {
-//
-//    init(spacing: CGFloat = 10, alignment: UIStackView.Alignment = .center, distribution: UIStackView.Distribution = .equalSpacing) {
-//        super.init(frame: .zero)
-//        self.axis = .vertical
-//        self.spacing = spacing
-//        self.alignment = alignment
-//        self.distribution = distribution
-//        self.translatesAutoresizingMaskIntoConstraints = false
-//    }
-//    
-//    required init(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//    
-//    override func addArrangedSubview(_ subView: UIView) {
-//        addSubview(subView)
-//        
-//        subView.translatesAutoresizingMaskIntoConstraints = false
-//        subView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-//        subView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-//    }
-//}
-
 class ZStackView: UIStackView {
     
     enum Alignment {
@@ -71,10 +25,6 @@ class ZStackView: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
     
     func addArrangedSubview(_ view: UIView,_ alignment: Alignment = .center) {
         addSubview(view)

@@ -51,6 +51,7 @@ extension WeatherService {
         }
     }
     
+    /// 날씨 설명 영어 넣으면 한글 버전으로 반환
     func getTheDescriptionKorVer(_ engVer: String) -> String {
         switch engVer {
         case "clear sky": "맑은 하늘"
