@@ -51,7 +51,6 @@ class WeatherCell: UITableViewCell {
     }()
     lazy var backgroundImage: UIImageView = {
         let image = UIImageView()
-        image.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
         image.layer.cornerRadius = 30
         image.clipsToBounds = true
         return image
@@ -67,7 +66,7 @@ class WeatherCell: UITableViewCell {
         fatalError("init(coder:) has not been impl")
     }
 }
-
+// 서울
 extension WeatherCell {
     func configure(with weatherData: CrntWeatherData) {
         cityName.text = weatherData.name
@@ -82,22 +81,22 @@ extension WeatherCell {
         switch weather {
         case "맑음":
             backgroundImage.image = UIImage(named: "few clouds")
-        case "few clouds":
-            backgroundImage.image = UIImage(named: "02d")
-        case "scattered clouds":
-            backgroundImage.image = UIImage(named: "03d")
+        case "튼구름":
+            backgroundImage.image = UIImage(named: "few clouds")
+        case "약간의 구름이 낀 하늘":
+            backgroundImage.image = UIImage(named: "few clouds")
         case "broken clouds":
-            backgroundImage.image = UIImage(named: "04d")
+            backgroundImage.image = UIImage(named: "few clouds")
         case "실 비":
-            backgroundImage.image = UIImage(named: "09d")
+            backgroundImage.image = UIImage(named: "few clouds")
         case "비":
-            backgroundImage.image = UIImage(named: "10d")
-        case "thunderstorm":
-            backgroundImage.image = UIImage(named: "11d")
-        case "snow":
-            backgroundImage.image = UIImage(named: "13d")
-        case "mist":
-            backgroundImage.image = UIImage(named: "50d")
+            backgroundImage.image = UIImage(named: "few clouds")
+        case "박무":
+            backgroundImage.image = UIImage(named: "few clouds")
+        case "눈":
+            backgroundImage.image = UIImage(named: "few clouds")
+        case "안개":
+            backgroundImage.image = UIImage(named: "few clouds")
         default:
             break
         }
@@ -136,7 +135,10 @@ extension WeatherCell {
         }
         
         backgroundImage.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalToSuperview().offset(5)
+            make.bottom.equalToSuperview().offset(-5)
+            make.leading.equalToSuperview().offset(5)
+            make.trailing.equalToSuperview().offset(-5)
         }
         
         cityName.snp.makeConstraints { make in

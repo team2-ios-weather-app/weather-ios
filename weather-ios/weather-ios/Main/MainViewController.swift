@@ -10,7 +10,6 @@ import UIKit
 class MainViewController: UIViewController {
     var weatherService = WeatherService()
     var currentWeather: CrntWeatherData?
-    
     private var tableView: UITableView!
     
     override func viewDidLoad() {

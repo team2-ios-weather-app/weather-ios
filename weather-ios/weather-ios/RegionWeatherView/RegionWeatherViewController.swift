@@ -4,6 +4,7 @@ import SnapKit
 
 class RegionWeatherVC: UIViewController {
     private lazy var regionTableView = UITableView()
+    private var refreshWeather: UIRefreshControl!
     private lazy var weatherService = WeatherService()
     private lazy var regionTitleButton: UIButton = {
         let button = UIButton()
@@ -17,6 +18,7 @@ class RegionWeatherVC: UIViewController {
         let search = UISearchBar()
         search.placeholder = "지역 검색"
         search.delegate = self
+        search.searchBarStyle = .minimal
         return search
     }()
     var onCitySelected: ((String) -> Void)?
@@ -52,7 +54,7 @@ class RegionWeatherVC: UIViewController {
         sender.endRefreshing()
     }
 }
-
+//공주 신촌, 전남, 수원
 // MARK: - 데이터 관리
 extension RegionWeatherVC {
     func saveCityName(_ cityName: String) {
@@ -91,7 +93,7 @@ extension RegionWeatherVC {
 extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return weatherDatas.count
-    }
+    }// 대구
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WeatherCell.identifier, for: indexPath) as! WeatherCell
@@ -112,7 +114,7 @@ extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
         }
         
     }
-    // 뷰 전환(메인화면으로 전환)
+    // 뷰 전환(메인화면으로 전환) 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cityName = weatherDatas[indexPath.row].name else { return }
         onCitySelected?(cityName)
@@ -142,7 +144,6 @@ extension RegionWeatherVC: UISearchBarDelegate {
         let weatherData = await WeatherService().getCrntWeatherData(cityName: cityName)
         DispatchQueue.main.async {
             self.updateTableView(with: weatherData)
-            //self.saveCityName(cityName)
         }
         //print("\(String(describing: weatherData))")
     }
@@ -163,7 +164,6 @@ extension RegionWeatherVC: UISearchBarDelegate {
                 UIView.animate(withDuration: 0.3) {
                     // SeachBar 탭 했을 때 Bar 높이 1.5배로 조정
                     searchBar.transform = CGAffineTransform(scaleX: 1.0, y: 1.5)
-                    
                 }
             }
         }
