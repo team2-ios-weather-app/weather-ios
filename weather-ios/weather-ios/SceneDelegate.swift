@@ -19,8 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         
-        let mainVC = RegionWeatherVC()
-        window?.rootViewController = mainVC
+        let naviVC = UINavigationController(rootViewController: MainViewController())
+        window?.rootViewController = naviVC
         window?.makeKeyAndVisible()
     }
 
@@ -50,8 +50,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
+        UserSettings.shared.save()
     }
-
-
 }
 

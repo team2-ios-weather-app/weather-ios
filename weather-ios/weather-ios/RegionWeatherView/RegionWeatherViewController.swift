@@ -141,7 +141,7 @@ extension RegionWeatherVC: UISearchBarDelegate {
     }
     
     func fetchAndDisplayWeather(for cityName: String) async {
-        let weatherData = await WeatherService().getCrntWeatherData(cityName: cityName)
+        let weatherData = await WeatherService().getCrntWeatherData(regionName: cityName, unit: .metric)
         DispatchQueue.main.async {
             self.updateTableView(with: weatherData)
         }
