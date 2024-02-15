@@ -84,7 +84,8 @@ extension MainViewController: UITableViewDataSource {
                 cell.weatherImageView.image = UIImage(named: currentWeather.weather?.first?.icon ?? "")
                 cell.tempLabel.text = currentWeather.main?.temp?.description
                 cell.tempLabel.text? += UserSettings.shared.weatherUnit == .metric ? " °C" : " °F"
-                cell.descriptLabel.text = currentWeather.weather?.first?.description
+                cell.descriptLabel.text = weatherService.getTheDescriptionKorVer(currentWeather.weather?.first?.description ?? "")
+                
             }
             return cell
         case 1:
