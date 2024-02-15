@@ -12,9 +12,8 @@
 		46B172B32B74772E00C9DB0D /* WeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46B172B22B74772E00C9DB0D /* WeatherCell.swift */; };
 		91994F847D33D045E16F8C9F /* Pods_weather_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F064FAF57BA02D69168CD1B7 /* Pods_weather_ios.framework */; };
 		C411AD912B71108A00E88089 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C411AD902B71108A00E88089 /* MapViewController.swift */; };
-		C418E9BB2B70BFFA00A0C2B3 /* example.swift in Sources */ = {isa = PBXBuildFile; fileRef = C418E9BA2B70BFFA00A0C2B3 /* example.swift */; };
+		C4F46BA02B7DC7D80082C683 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4F46B9F2B7DC7D80082C683 /* Secrets.swift */; };
 		E00063F02B7D4202007C5FCA /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00063EF2B7D4202007C5FCA /* UserSettings.swift */; };
-		E00FCB892B7BFF7B00E93F7E /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FCB882B7BFF7B00E93F7E /* Secrets.swift */; };
 		E02BB7872B72D1D10094069E /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02BB7862B72D1D10094069E /* Coordinate.swift */; };
 		E0360CB22B70BB0E004C40F4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0360CB12B70BB0E004C40F4 /* AppDelegate.swift */; };
 		E0360CB42B70BB0E004C40F4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0360CB32B70BB0E004C40F4 /* SceneDelegate.swift */; };
@@ -37,9 +36,8 @@
 		46B172B22B74772E00C9DB0D /* WeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCell.swift; sourceTree = "<group>"; };
 		46C4FABC2B7CA84F009C5F63 /* Seracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seracts.swift; sourceTree = "<group>"; };
 		C411AD902B71108A00E88089 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		C418E9BA2B70BFFA00A0C2B3 /* example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = example.swift; sourceTree = "<group>"; };
+		C4F46B9F2B7DC7D80082C683 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		E00063EF2B7D4202007C5FCA /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
-		E00FCB882B7BFF7B00E93F7E /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		E02BB7862B72D1D10094069E /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		E0360CAE2B70BB0E004C40F4 /* weather-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "weather-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0360CB12B70BB0E004C40F4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,14 +87,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		464680B02B7DABA8007C2EA4 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				46C4FABC2B7CA84F009C5F63 /* Seracts.swift */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		468B86B62B70C22F001836C1 /* RegionWeatherView */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,14 +103,6 @@
 				C411AD902B71108A00E88089 /* MapViewController.swift */,
 			);
 			path = MapWeatherChecking;
-			sourceTree = "<group>";
-		};
-		C418E9B92B70BE4900A0C2B3 /* SavedLocationsWeather */ = {
-			isa = PBXGroup;
-			children = (
-				C418E9BA2B70BFFA00A0C2B3 /* example.swift */,
-			);
-			path = SavedLocationsWeather;
 			sourceTree = "<group>";
 		};
 		E0360CA52B70BB0E004C40F4 = {
@@ -147,12 +129,11 @@
 			children = (
 				E0360CB12B70BB0E004C40F4 /* AppDelegate.swift */,
 				E0360CB32B70BB0E004C40F4 /* SceneDelegate.swift */,
-				E00FCB882B7BFF7B00E93F7E /* Secrets.swift */,
+				C4F46B9F2B7DC7D80082C683 /* Secrets.swift */,
 				E00063EF2B7D4202007C5FCA /* UserSettings.swift */,
 				E0955E5A2B7ACBA0006EBD44 /* Main */,
 				E0360CC62B70BB5E004C40F4 /* Models */,
 				468B86B62B70C22F001836C1 /* RegionWeatherView */,
-				C418E9B92B70BE4900A0C2B3 /* SavedLocationsWeather */,
 				C418E9B82B70BE3200A0C2B3 /* MapWeatherChecking */,
 				E0360CBA2B70BB0F004C40F4 /* Assets.xcassets */,
 				E0360CBC2B70BB0F004C40F4 /* LaunchScreen.storyboard */,
@@ -328,10 +309,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4630FDB32B70E2140015CF43 /* RegionWeatherViewController.swift in Sources */,
-				C418E9BB2B70BFFA00A0C2B3 /* example.swift in Sources */,
+				C4F46BA02B7DC7D80082C683 /* Secrets.swift in Sources */,
 				E0955E592B7AC54A006EBD44 /* VStackView.swift in Sources */,
 				E0360CB62B70BB0E004C40F4 /* MainViewController.swift in Sources */,
-				E00FCB892B7BFF7B00E93F7E /* Secrets.swift in Sources */,
 				E0955E5C2B7ACC44006EBD44 /* LabelViewCell.swift in Sources */,
 				E0360CB22B70BB0E004C40F4 /* AppDelegate.swift in Sources */,
 				46B172B32B74772E00C9DB0D /* WeatherCell.swift in Sources */,
