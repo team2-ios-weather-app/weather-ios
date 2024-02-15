@@ -22,6 +22,7 @@ class TopWeatherViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 32, weight: .medium)
         label.textAlignment = .center
+        label.textColor = .white
         return label
     }()
     
@@ -29,6 +30,7 @@ class TopWeatherViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 24, weight: .regular)
         label.textAlignment = .center
+        label.textColor = .white
         return label
     }()
     
@@ -54,9 +56,12 @@ class TopWeatherViewCell: UITableViewCell {
                     return view
                 }()
             ])
+            view.backgroundColor = .clear
             return view
         }()
         
+        backgroundColor = .clear
+        contentView.backgroundColor  = .clear
         contentView.addSubview(container)
 
         NSLayoutConstraint.activate([
