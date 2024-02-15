@@ -78,9 +78,13 @@ class WeatherCell: UITableViewCell {
 extension WeatherCell {
     func configure(with weatherData: CrntWeatherData) {
         backgroundColor = UIColor.clear
-        cityName.text = weatherData.name
+        cityName.text = weatherData.coord?.localNames?.ko ?? ""
         temperature.text = "\(Int(weatherData.main?.temp ?? 0)) °C"
-        weather.text = weatherData.weather?.first?.description ?? "날씨에 대한 정보를 가져올 수 없습니다."
+        if let weatherDescriptionEng = weatherData.weather?.first?.description {
+            weather.text = getTheDescriptionKorVer(weatherDescriptionEng)
+        } else {
+            weather.text = "날씨 정보 없음"
+        }
         tempMinMax.text = "최고 \(Int(weatherData.main?.tempMax ?? 0))°C / 촤저 \(Int(weatherData.main?.tempMin ?? 0))°C"
         updateBackground(for: weatherData.weather?.first?.description ?? "")
         
@@ -169,7 +173,68 @@ extension WeatherCell {
     
 }
 
-
+extension WeatherCell {
+    func getTheDescriptionKorVer(_ engVer: String) -> String {
+        switch engVer {
+        case "clear sky": "맑은 하늘"
+        case "few clouds": "구름 조금"
+        case "scattered clouds": "조각 구름"
+        case "broken clouds": "부서진 구름"
+        case "shower rain": "소나기"
+        case "rain": "비"
+        case "thunderstorm": "천둥번개"
+        case "snow": "눈"
+        case "mist": "안개"
+        case "thunderstorm with light rain": "약한 비를 동반한 천둥번개"
+        case "thunderstorm with rain": "비를 동반한 천둥번개"
+        case "thunderstorm with heavy rain": "강한 비를 동반한 천둥번개"
+        case "light thunderstorm": "약한 천둥번개"
+        case "heavy thunderstorm": "강한 천둥번개"
+        case "ragged thunderstorm": "불규칙적인 천둥번개"
+        case "thunderstorm with light drizzle": "약한 이슬비를 동반한 천둥번개"
+        case "thunderstorm with drizzle": "이슬비를 동반한 천둥번개"
+        case "thunderstorm with heavy drizzle": "강한 이슬비를 동반한 천둥번개"
+        case "light intensity drizzle": "약한 이슬비"
+        case "drizzle": "이슬비"
+        case "heavy intensity drizzle": "강한 이슬비"
+        case "light intensity drizzle rain": "약한 이슬비 비"
+        case "drizzle rain": "이슬비 비"
+        case "heavy intensity drizzle rain": "강한 이슬비 비"
+        case "shower rain and drizzle": "소나기와 이슬비"
+        case "heavy shower rain and drizzle": "강한 소나기와 이슬비"
+        case "shower drizzle": "소나기 이슬비"
+        case "light rain": "약한 비"
+        case "moderate rain": "중간 비"
+        case "heavy intensity rain": "강한 비"
+        case "very heavy rain": "매우 강한 비"
+        case "extreme rain": "극심한 비"
+        case "freezing rain": "얼어붙는 비"
+        case "light intensity shower rain": "약한 소나기 비"
+        case "heavy intensity shower rain": "강한 소나기 비"
+        case "ragged shower rain": "불규칙적인 소나기 비"
+        case "light snow": "약한 눈"
+        case "heavy snow": "강한 눈"
+        case "sleet": "진눈깨비"
+        case "light shower sleet": "약한 진눈깨비 소나기"
+        case "shower sleet": "진눈깨비 소나기"
+        case "light rain and snow": "약한 비와 눈"
+        case "rain and snow": "비와 눈"
+        case "light shower snow": "약한 눈 소나기"
+        case "shower snow": "눈 소나기"
+        case "heavy shower snow": "강한 눈 소나기"
+        case "smoke": "연기"
+        case "haze": "안개"
+        case "sand/dust whirls": "모래/먼지 회오리"
+        case "fog": "안개"
+        case "sand": "모래"
+        case "dust": "먼지"
+        case "volcanic ash": "화산재"
+        case "squalls": "돌풍"
+        case "tornado": "토네이도"
+        default: ""
+        }
+    }
+}
 
 @available(iOS 17, *)
 #Preview("", traits: .defaultLayout) {
