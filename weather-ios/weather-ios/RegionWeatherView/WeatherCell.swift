@@ -20,27 +20,35 @@ class WeatherCell: UITableViewCell {
     }()
     lazy var cityName: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 30)
-        label.textColor = UIColor.black
+        label.font = UIFont.systemFont(ofSize: 30, weight: .heavy)
+        label.textColor = UIColor.white
+        label.shadowColor = UIColor.black // 텍스트 그림자
+        label.shadowOffset = CGSize(width: 2, height: 2)
         return label
     }()
     lazy var temperature: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 30)
-        label.textColor = UIColor.black
+        label.font = UIFont.boldSystemFont(ofSize: 35)
+        label.textColor = UIColor.white
+        label.shadowColor = UIColor.black
+        label.shadowOffset = CGSize(width: 2, height: 2)
         return label
     }()
     lazy var tempMinMax: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 15)
-        label.textColor = UIColor.systemBlue
+        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        label.textColor = UIColor.white.withAlphaComponent(0.85)
+        label.shadowColor = UIColor.black
+        label.shadowOffset = CGSize(width: 1, height: 1)
         return label
     }()
     lazy var weather: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = UIColor.black
-        label.numberOfLines = 2
+        label.font = UIFont.systemFont(ofSize: 19, weight: .medium)
+        label.textColor = UIColor.white
+        label.shadowColor = UIColor.black
+        label.shadowOffset = CGSize(width: 1, height: 1)
+        label.numberOfLines = 2 // Keep as is for multiline text
         return label
     }()
     lazy var time: UILabel = {
@@ -65,41 +73,47 @@ class WeatherCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been impl")
     }
+    
+    var clear: [String] = ["clear sky"]
+    var fewClouds: [String] = ["few clouds", "scattered clouds", "broken clouds", "overcast clouds"]
+    var rain: [String] = ["rain", "shower rain", "light intensity drizzle", "drizzle", "heavy intensity drizzle", "light intensity drizzle rain", "drizzle rain", "heavy intensity drizzle rain", "shower rain and drizzle", "heavy shower rain and drizzle", "shower drizzle", "light rain", "moderate rain", "heavy intensity rain", "very heavy rain", "extreme rain", "freezing rain", "light intensity shower rain", "    shower rain", "heavy intensity shower rain", "ragged shower rain"]
+    var thunderstorm: [String] = ["thunderstorm", "thunderstorm with light rain", "thunderstorm with rain", "thunderstorm with heavy rain", "light thunderstorm", "thunderstorm", "heavy thunderstorm", "ragged thunderstorm", "thunderstorm with light drizzle", "thunderstorm with drizzle", "thunderstorm with heavy drizzle"]
+    var clouds: [String] = ["scattered clouds", "broken clouds", ]
+    var snow: [String] = ["snow", "light rain and snow", "light snow", "heavy snow", "sleet", "light shower sleet", "shower sleet", "light rain and snow", "rain and snow", "light shower snow", "shower snow", "heavy shower snow"]
+    var mist: [String] = ["mist", "smoke", "haze", "sand/dust whirls", "fog", "sand", "dust", "volcanic ash", "squalls", "tornado"]
 }
-// 서울
+// 서울 오사카
 extension WeatherCell {
     func configure(with weatherData: CrntWeatherData) {
+        backgroundColor = UIColor.clear
         cityName.text = weatherData.name
-        temperature.text = "\(Int(weatherData.main?.temp ?? 0))°C"
+        temperature.text = "\(Int(weatherData.main?.temp ?? 0)) °C"
         weather.text = weatherData.weather?.first?.description ?? "날씨에 대한 정보를 가져올 수 없습니다."
         tempMinMax.text = "최고 \(Int(weatherData.main?.tempMax ?? 0)) / 촤저 \(Int(weatherData.main?.tempMin ?? 0))"
         updateBackground(for: weatherData.weather?.first?.description ?? "")
+        
+        contentView.backgroundColor = UIColor.clear
     }
     
     private func updateBackground(for weather: String) {
         // 날씨 description에 따라 배경 업데이트.
         switch weather {
-        case "맑음":
-            backgroundImage.image = UIImage(named: "few clouds")
-        case "튼구름":
-            backgroundImage.image = UIImage(named: "few clouds")
-        case "약간의 구름이 낀 하늘":
-            backgroundImage.image = UIImage(named: "few clouds")
-        case "보통 비":
-            backgroundImage.image = UIImage(named: "few clouds")
-        case "실 비":
-            backgroundImage.image = UIImage(named: "few clouds")
-        case "비":
-            backgroundImage.image = UIImage(named: "few clouds")
-        case "박무":
-            backgroundImage.image = UIImage(named: "few clouds")
-        case "눈":
-            backgroundImage.image = UIImage(named: "few clouds")
-        case "안개":
-            backgroundImage.image = UIImage(named: "few clouds")
-        case "온흐림":
-            backgroundImage.image = UIImage(named: "few clouds")
+        case _ where clear.contains(weather):
+            backgroundImage.image = UIImage(named: "clear")
+        case _ where fewClouds.contains(weather):
+            backgroundImage.image = UIImage(named: "clouds")
+        case _ where rain.contains(weather):
+            backgroundImage.image = UIImage(named: "rain")
+        case _ where thunderstorm.contains(weather):
+            backgroundImage.image = UIImage(named: "thunderstorm")
+        case _ where clouds.contains(weather):
+            backgroundImage.image = UIImage(named: "clouds")
+        case _ where snow.contains(weather):
+            backgroundImage.image = UIImage(named: "snow")
+        case _ where mist.contains(weather):
+            backgroundImage.image = UIImage(named: "mist")
         default:
+            backgroundImage.image = UIImage(named: "clear")
             break
         }
         print("\(weather)")
@@ -136,24 +150,19 @@ extension WeatherCell {
         }
         
         cityName.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
-            make.left.equalToSuperview().offset(20)
-        }
-        
-        time.snp.makeConstraints { make in
-            make.top.equalTo(cityName.snp.bottom).offset(5)
-            make.left.equalTo(cityName.snp.left).offset(10)
+            make.top.equalToSuperview().offset(25)
+            make.left.equalToSuperview().offset(40)
         }
         
         weather.snp.makeConstraints { make in
-            make.top.equalTo(time.snp.bottom).offset(10)
-            make.left.equalTo(time.snp.left).offset(10)
+            make.top.equalTo(cityName.snp.bottom).offset(10)
+            make.left.equalTo(cityName.snp.left)
         }
         
         temperature.snp.makeConstraints { make in
             make.right.equalToSuperview().offset(-30)
-            make.centerY.equalToSuperview()
-            make.width.equalTo(100)
+            make.top.equalToSuperview().offset(25)
+            make.width.equalTo(120)
         }
         
         tempMinMax.snp.makeConstraints { make in

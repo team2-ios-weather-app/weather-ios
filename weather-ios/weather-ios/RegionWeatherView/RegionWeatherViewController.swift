@@ -9,8 +9,11 @@ class RegionWeatherVC: UIViewController {
     private lazy var regionTitleButton: UIButton = {
         let button = UIButton()
         button.setTitle("지역별 날씨", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .semibold)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.shadowColor = UIColor.black
+        button.titleLabel?.shadowOffset = CGSize(width: 2, height: 2)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 32, weight: .heavy)
+        button.backgroundColor = UIColor.clear
         button.layer.cornerRadius = 10
         return button
     }()
@@ -26,12 +29,14 @@ class RegionWeatherVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        
         setupRegionTableView()
         addSubViews()
         autoLayouts()
         keyBoardHide()
         loadRegions()
+        tableViewBackground()
+        
     }
     
     private func setupRegionTableView() {
@@ -40,6 +45,18 @@ class RegionWeatherVC: UIViewController {
         regionTableView.dataSource = self
         regionTableView.translatesAutoresizingMaskIntoConstraints = false
         regionTableView.register(WeatherCell.self, forCellReuseIdentifier: WeatherCell.identifier)
+    }
+    private func tableViewBackground() {
+        let backgroundImage = UIImage(named: "skyview")
+        let backgroundImageView = UIImageView(image: backgroundImage)
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.frame = self.view.bounds
+        view.insertSubview(backgroundImageView, at: 0)
+        
+        regionTableView.backgroundColor = UIColor.clear.withAlphaComponent(0.2)
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.clear
+        regionTableView.backgroundView = backgroundView
     }
     
     private func loadRegions() {
@@ -55,7 +72,7 @@ class RegionWeatherVC: UIViewController {
 extension RegionWeatherVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return weatherDatas.count
-    }// 대구
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: WeatherCell.identifier, for: indexPath) as! WeatherCell
@@ -110,11 +127,11 @@ extension RegionWeatherVC: UISearchBarDelegate {
     }
     
     func updateTableView(with weatherData: CrntWeatherData?) {
-        guard let weatherData = weatherData else { return }
+        guard let weatherData = weatherData,
+                  !weatherDatas.contains(where: { $0.name == weatherData.name }) else { return }
         weatherDatas.append(weatherData)
         regionTableView.reloadData()
         UserSettings.shared.registeredRegions.append(weatherData.name ?? "")
-        UserSettings.shared.save()
         
         print("값 \(weatherData.name ?? "")")
     }
@@ -145,7 +162,7 @@ extension RegionWeatherVC {
     
     private func autoLayouts() {
         regionTitleButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             make.left.right.equalTo(view)
         }
         regionSearchBar.snp.makeConstraints { make in
@@ -154,8 +171,8 @@ extension RegionWeatherVC {
         }
         regionTableView.snp.makeConstraints { make in
             make.top.equalTo(regionSearchBar.snp.bottom).offset(30)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
+            make.left.equalToSuperview().offset(10)
+            make.right.equalToSuperview().inset(10)
             make.bottom.equalToSuperview()
         }
     }
