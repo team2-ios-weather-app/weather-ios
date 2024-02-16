@@ -70,18 +70,24 @@ extension MainViewController {
     }
     
     private func setNavigationView() {
-        let unitToggleItem = {
-            let item = UIBarButtonItem(title: "", primaryAction: .init(handler: { _ in
-                UserSettings.shared.weatherUnitToggle()
-                self.updateWeatherInfo()
-            }))
-            return item
-        }()
-        
-        navigationItem.setRightBarButton(unitToggleItem, animated: true)
+        let customButton = UIButton(type: .system)
+        customButton.setTitle(UserSettings.shared.weatherUnit == .metric ? " °C" : " °F", for: .normal)
+        customButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
+        customButton.addTarget(self, action: #selector(unitToggleAction), for: .touchUpInside)
+        customButton.tintColor = .white
+        let unitToggleItem = UIBarButtonItem(customView: customButton)
+        navigationItem.setLeftBarButton(unitToggleItem, animated: true)
         navigationItem.title = "로딩중.."
     }
-    
+    @objc private func unitToggleAction() {
+        UserSettings.shared.weatherUnitToggle()
+        updateWeatherInfo()
+
+        if let customButton = navigationItem.leftBarButtonItem?.customView as? UIButton {
+            customButton.setTitle(UserSettings.shared.weatherUnit == .metric ? " °C" : " °F", for: .normal)
+        }
+    }
+
     private func updateWeatherInfo() {
         Task {
             currentWeather = await weatherService.getCrntWeatherData(regionName: UserSettings.shared.selectedRegion, unit: UserSettings.shared.weatherUnit) // 서비스용
@@ -89,9 +95,8 @@ extension MainViewController {
             
             DispatchQueue.main.async {
                 self.navigationItem.title = self.currentWeather?.coord?.localNames?.ko
-                self.navigationController?.navigationBar.tintColor = .green
                 self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 25),.foregroundColor: UIColor.white]
-                self.navigationItem.rightBarButtonItem?.title = UserSettings.shared.weatherUnit == .metric ? " °C" : " °F"
+                self.navigationItem.leftBarButtonItem?.title = UserSettings.shared.weatherUnit == .metric ? " °C" : " °F"
                 
                 self.tableView.reloadData()
             }
